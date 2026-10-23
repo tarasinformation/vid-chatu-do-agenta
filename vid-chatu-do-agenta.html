@@ -896,7 +896,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
       <span class="meta">Що збереш за годину:</span>
       <div class="system" id="system"></div>
     </div>
-    <p data-s="h0b" class="meta">Перші 30 хвилин нічого встановлювати не треба. Симулятор нікуди нічого не надсилає, а прогрес живе лише у твоєму браузері.</p>
+    <p data-s="h0b" class="meta">Перші 30 хвилин нічого встановлювати не треба. Симулятор нікуди нічого не надсилає, а прогрес живе лише у твоєму браузері. Ми лише анонімно рахуємо, скільки людей почали й пройшли курс: трек і дату, без імені.</p>
   </div>
 </header>
 
@@ -1263,7 +1263,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
           <div class="achs" id="badges"></div>
           <div class="cert-foot"><span id="cert-date"></span><span class="cert-seal" aria-hidden="true">✦</span><span id="cert-score"></span></div>
         </div>
-        <p class="meta">Ім'я лишається лише у твоєму браузері. Зроби знімок екрана й похвалися колегам. Скромність почекає до завтра.</p>
+        <p class="meta">Ім'я лишається лише у твоєму браузері, ми його не бачимо. Зроби знімок екрана й похвалися колегам. Скромність почекає до завтра.</p>
       </div>
       <div data-s="f2" class="card stack ai-prompt">
         <h3>Продовж з будь-яким ШІ 🤖</h3>
@@ -1413,7 +1413,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
 
 
 <script>
-var SRC_LINES={"head.html": 816, "body.html": 597, "engine.js": 862, "deck.js": 396, "track_pm.js": 106, "track_an.js": 105, "track_law.js": 102, "build.py": 17, "vid-chatu-do-agenta.html": 2994};
+var SRC_LINES={"head.html": 816, "body.html": 597, "engine.js": 862, "deck.js": 407, "track_pm.js": 106, "track_an.js": 105, "track_law.js": 102, "build.py": 17, "vid-chatu-do-agenta.html": 3005};
 var TRACKS = {};
 TRACKS.pm = {
   who: "Менеджер проєктів", what: "Проміжний звіт донору: лограмка, індикатори, джерела", short: "звіт донору",
@@ -2608,6 +2608,15 @@ TRACKS.law = {
      Fill these after setup, see docs/wall-setup.md. Empty values = the wall shows "coming soon". */
   var WALL = { form: "https://docs.google.com/forms/d/e/1FAIpQLSdUEg-SLd39tqYp0PKYFPY3C8qNrlDH2hN_qOxq3uXEB17d2A/formResponse", entry: "entry.1425467523", sheet: "1S9etO14Bz9nE7KIMgDSj7IlR-C1Pcg0Bis-3p_8A3ls" };
 
+  /* Anonymous completion counter: a second Google Form gets only the event (start / finish) and the track, once per browser.
+     Nothing is sent from local or test copies. Counts live in the owner's private sheet (tab «Підсумок»). */
+  var COUNT = { form: "https://docs.google.com/forms/d/e/1FAIpQLSeEe4jkb-AL2XHI_rSY3a3VnEjjINDNNwICRVEEBAtT9Vqszw/formResponse", ev: "entry.589375608", tr: "entry.669308470" };
+  function ping(ev) {
+    if (D["ping_" + ev] || !/^https:$/.test(location.protocol) || /^(localhost|127\.|\[::1\])/.test(location.hostname) || navigator.webdriver) return;
+    D["ping_" + ev] = 1; dsave();
+    try { var b = new URLSearchParams(); b.append(COUNT.ev, ev); b.append(COUNT.tr, A.T().who); fetch(COUNT.form, { method: "POST", mode: "no-cors", body: b }).catch(function () {}); } catch (e) {}
+  }
+
   var DKEY = "vid-chatu-do-agenta-deck";
   var D = {};
   try { D = JSON.parse(localStorage.getItem(DKEY) || "{}") || {}; } catch (e) { D = {}; }
@@ -2666,6 +2675,7 @@ TRACKS.law = {
       if (D.st.indexOf(s[0]) < 0 && stageDone(s[0])) { D.st.push(s[0]); toast("✓", "Етап " + (i + 1) + " пройдено", PRAISE[D.st.length % PRAISE.length] + ". " + D.st.length + " з " + A.STAGES.length + "."); }
     });
     dsave(); paint();
+    if (A.STAGES.every(function (s) { return stageDone(s[0]); })) ping("finish");
   });
 
   /* ---------- slides ---------- */
@@ -2973,6 +2983,7 @@ TRACKS.law = {
     intro.classList.add("out");
     setTimeout(function () { intro.classList.add("gone"); intro.hidden = true; }, reduce ? 0 : 700);
     show(resume ? (D.i || 0) : 0, 1);
+    ping("start");
     var b = $("#db-next"); if (b) b.focus({ preventScroll: true });
   }
   var returning = D.i > 0 || (D.st && D.st.length > 0) || (D.ach && D.ach.length > 0);

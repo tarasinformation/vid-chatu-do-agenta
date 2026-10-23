@@ -12,6 +12,15 @@
      Fill these after setup, see docs/wall-setup.md. Empty values = the wall shows "coming soon". */
   var WALL = { form: "https://docs.google.com/forms/d/e/1FAIpQLSdUEg-SLd39tqYp0PKYFPY3C8qNrlDH2hN_qOxq3uXEB17d2A/formResponse", entry: "entry.1425467523", sheet: "1S9etO14Bz9nE7KIMgDSj7IlR-C1Pcg0Bis-3p_8A3ls" };
 
+  /* Anonymous completion counter: a second Google Form gets only the event (start / finish) and the track, once per browser.
+     Nothing is sent from local or test copies. Counts live in the owner's private sheet (tab «Підсумок»). */
+  var COUNT = { form: "https://docs.google.com/forms/d/e/1FAIpQLSeEe4jkb-AL2XHI_rSY3a3VnEjjINDNNwICRVEEBAtT9Vqszw/formResponse", ev: "entry.589375608", tr: "entry.669308470" };
+  function ping(ev) {
+    if (D["ping_" + ev] || !/^https:$/.test(location.protocol) || /^(localhost|127\.|\[::1\])/.test(location.hostname) || navigator.webdriver) return;
+    D["ping_" + ev] = 1; dsave();
+    try { var b = new URLSearchParams(); b.append(COUNT.ev, ev); b.append(COUNT.tr, A.T().who); fetch(COUNT.form, { method: "POST", mode: "no-cors", body: b }).catch(function () {}); } catch (e) {}
+  }
+
   var DKEY = "vid-chatu-do-agenta-deck";
   var D = {};
   try { D = JSON.parse(localStorage.getItem(DKEY) || "{}") || {}; } catch (e) { D = {}; }
@@ -70,6 +79,7 @@
       if (D.st.indexOf(s[0]) < 0 && stageDone(s[0])) { D.st.push(s[0]); toast("✓", "Етап " + (i + 1) + " пройдено", PRAISE[D.st.length % PRAISE.length] + ". " + D.st.length + " з " + A.STAGES.length + "."); }
     });
     dsave(); paint();
+    if (A.STAGES.every(function (s) { return stageDone(s[0]); })) ping("finish");
   });
 
   /* ---------- slides ---------- */
@@ -377,6 +387,7 @@
     intro.classList.add("out");
     setTimeout(function () { intro.classList.add("gone"); intro.hidden = true; }, reduce ? 0 : 700);
     show(resume ? (D.i || 0) : 0, 1);
+    ping("start");
     var b = $("#db-next"); if (b) b.focus({ preventScroll: true });
   }
   var returning = D.i > 0 || (D.st && D.st.length > 0) || (D.ach && D.ach.length > 0);
