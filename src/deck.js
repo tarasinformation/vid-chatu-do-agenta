@@ -379,12 +379,17 @@
     show(resume ? (D.i || 0) : 0, 1);
     var b = $("#db-next"); if (b) b.focus({ preventScroll: true });
   }
-  if (D.i > 1) { var r = $("#intro-resume"); r.hidden = false; r.onclick = function () { closeIntro(true); }; $("#intro-go").firstChild.textContent = "Почати спочатку "; $("#intro-go").onclick = function () { D.i = 0; dsave(); closeIntro(false); }; }
-  else $("#intro-go").onclick = function () { closeIntro(false); };
+  var returning = D.i > 0 || (D.st && D.st.length > 0) || (D.ach && D.ach.length > 0);
+  $("#intro-go").onclick = function () { closeIntro(returning); };
+  if (returning) {
+    $("#intro-go-t").textContent = "Продовжити";
+    var rs = $("#intro-restart"); rs.hidden = false; rs.onclick = function () { D.i = 0; dsave(); closeIntro(false); };
+  }
   intro.addEventListener("click", function (e) { if (e.target === intro) closeIntro(true); });
 
   document.body.classList.add("deck");
   slides = build();
+  if (returning && slides[D.i || 0]) { var w = $("#intro-where"); w.hidden = false; w.textContent = "Минулого разу: слайд " + ((D.i || 0) + 1) + " з " + slides.length + " · " + slides[D.i || 0].title; }
   show(D.i || 0, 0);
   setTimeout(function () { intro.classList.add("ready"); }, reduce ? 0 : 5000);
   setTimeout(function () { var g = $("#intro-go"); if (g && !intro.hidden) g.focus({ preventScroll: true }); }, reduce ? 0 : 3200);

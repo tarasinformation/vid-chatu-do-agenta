@@ -653,6 +653,8 @@ body.deck .deckbar { display: flex; position: fixed; z-index: 30; left: 50%; bot
 .l1 { animation-delay: .45s; } .l2 { animation-delay: 1.1s; color: var(--muted); } .l3 { animation-delay: 1.9s; } .l4 { animation-delay: 2.5s; } .l5 { animation-delay: 3.1s; } .l6 { animation-delay: 3.4s; }
 @keyframes fade-up { from { opacity: 0; transform: translateY(14px); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
 .intro.ready .intro-line, .intro.ready .intro-k, .intro.ready .intro-mark { opacity: 1 !important; transform: none !important; filter: none !important; }
+.intro-where { font-size: 13.5px; color: var(--muted); font-family: var(--font-mono); animation: fade-up .9s var(--ease-out-5) 3.2s both; }
+.intro.ready .intro-where { opacity: 1 !important; transform: none !important; filter: none !important; }
 .intro-cta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
 .btn-lux { position: relative; overflow: hidden; border: 0; border-radius: 999px; padding: 15px 28px; font-size: 16px; font-weight: 600; background: var(--primary); color: var(--primary-fg); box-shadow: var(--shadow-lg); transition: transform .25s var(--ease-3), box-shadow .25s; }
 .btn-lux::after { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / .28) 50%, transparent 70%); transform: translateX(-100%); animation: shine 3.2s var(--ease-in-out-3) 4s infinite; }

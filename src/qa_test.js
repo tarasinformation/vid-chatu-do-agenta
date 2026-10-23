@@ -1,7 +1,7 @@
 (async function(){
 const sleep=ms=>new Promise(r=>setTimeout(r,ms)); const R={errs:[]}; window.addEventListener('error',e=>R.errs.push(e.message));
 try{ localStorage.clear(); }catch(e){}
-R.intro=!!document.getElementById('intro')&&!document.getElementById('intro').hidden; document.getElementById('intro-go').click(); await sleep(900); R.introGone=document.getElementById('intro').hidden;
+R.intro=!!document.getElementById('intro')&&!document.getElementById('intro').hidden; R.introBtn=document.getElementById('intro-go-t').textContent+'|'+document.getElementById('intro-restart').hidden; document.getElementById('intro-go').click(); await sleep(900); R.introGone=document.getElementById('intro').hidden;
 async function sim(k){ document.querySelector(`.track[data-k="${k}"]`).click(); await sleep(300);
   for(let i=0;i<10;i++){ const b=document.querySelector('#chat-actions button'); if(!b) break; b.click(); await sleep(900); }
   document.querySelector('#agent-actions button.primary')?.click();
