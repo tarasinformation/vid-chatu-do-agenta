@@ -33,9 +33,10 @@ document.getElementById('match-0').value='Модель';document.getElementById(
 document.getElementById('egg-big').click(); await sleep(100); R.bonus=!document.getElementById('bonus').hidden; R.srcTree=document.querySelectorAll('#src-tree button').length; R.srcLines=document.getElementById('src-view').innerText.match(/\d+ рядків/)?.[0];
 R.toasts=document.querySelectorAll('#toasts .toast').length;
 { const nb=document.getElementById('db-next'), pb=document.getElementById('db-prev'); for(let i=0;i<60;i++) pb.click(); let n=0, empty=[], hs=[];
-  for(let i=0;i<60;i++){ n++; const on=document.querySelector('.slide-on'); const vis=[...on.querySelectorAll('.s-on')].some(e=>e.getClientRects().length)||!on.querySelector('[data-s]'); if(!vis&&!on.querySelector('.deck-lock')) empty.push(document.getElementById('db-title').textContent); if(document.documentElement.scrollWidth>document.documentElement.clientWidth) hs.push(document.getElementById('db-title').textContent); if(nb.disabled) break; nb.click(); }
+  for(let i=0;i<60;i++){ n++; const on=document.querySelector('.slide-on'); const vis=[...on.querySelectorAll('.s-on')].some(e=>e.getClientRects().length)||!on.querySelector('[data-s]'); if(!vis&&!on.querySelector('.deck-lock')) empty.push(document.getElementById('db-title').textContent); if(document.documentElement.scrollWidth>document.documentElement.clientWidth) hs.push(document.getElementById('db-title').textContent); const cc=document.getElementById('db-count').textContent.split('/').map(x=>x.trim()); if(cc[0]===cc[1]) break; nb.click(); }
   R.slides=n; R.emptySlides=empty; R.hscrollSlides=hs; }
-R.prompt=document.getElementById('ai-prompt').textContent.length; R.badgesOn=document.querySelectorAll('#badges .ach.on').length; R.wall=!!document.getElementById('wall-form');
+nb_restart:{ document.getElementById('db-next').click(); R.restart=document.getElementById('db-count').textContent.trim().startsWith('1 '); }
+R.share=!!document.getElementById('share-go'); R.prompt=document.getElementById('ai-prompt').textContent.length; R.badgesOn=document.querySelectorAll('#badges .ach.on').length; R.wall=!!document.getElementById('wall-form');
 R.hscroll=document.documentElement.scrollWidth+'/'+document.documentElement.clientWidth;
 const pre=document.createElement('pre'); pre.id='testout'; pre.textContent=JSON.stringify(R); document.body.appendChild(pre);
 })();

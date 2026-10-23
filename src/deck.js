@@ -10,7 +10,7 @@
 
   /* Wall of suggestions: Google Form (anonymous, no sign-in) + a separate public sheet with approved rows only.
      Fill these after setup, see docs/wall-setup.md. Empty values = the wall shows "coming soon". */
-  var WALL = { form: "", entry: "", sheet: "" };
+  var WALL = { form: "https://docs.google.com/forms/d/e/1FAIpQLSdUEg-SLd39tqYp0PKYFPY3C8qNrlDH2hN_qOxq3uXEB17d2A/formResponse", entry: "entry.1425467523", sheet: "1S9etO14Bz9nE7KIMgDSj7IlR-C1Pcg0Bis-3p_8A3ls" };
 
   var DKEY = "vid-chatu-do-agenta-deck";
   var D = {};
@@ -123,9 +123,9 @@
     $("#db-title").textContent = sl.title;
     $("#db-count").textContent = (cur + 1) + " / " + n;
     $("#db-prev").disabled = cur === 0;
-    $("#db-next").disabled = cur === n - 1;
-    $("#db-next-t").textContent = cur === 0 ? "Почнімо" : cur === n - 1 ? "Кінець" : "Далі";
-    $("#db-next").classList.toggle("nudge", cur === 0);
+    $("#db-next").disabled = false;
+    $("#db-next-t").textContent = cur === 0 ? "Почнімо" : cur === n - 1 ? "Почати спочатку ↺" : "Далі";
+    $("#db-next").classList.toggle("nudge", cur === 0); $("#db-next-a").hidden = cur === n - 1;
     var p = $("#deck-prog"); if (p) p.style.width = (cur / (n - 1) * 100) + "%";
     $$("#rail a").forEach(function (a) { var h = (a.getAttribute("href") || "").slice(1); a.classList.toggle("cur", h === sl.stage); });
   }
@@ -138,7 +138,7 @@
 
   /* navigation */
   $("#db-prev").onclick = function () { go(cur - 1); };
-  $("#db-next").onclick = function () { go(cur + 1); };
+  $("#db-next").onclick = function () { if (cur >= slides.length - 1) go(0); else go(cur + 1); };
   document.addEventListener("keydown", function (e) {
     if (!document.body.classList.contains("deck") || e.altKey || e.ctrlKey || e.metaKey) return;
     var t = e.target, tag = t && t.tagName;
@@ -252,7 +252,7 @@
       if (!rows.length) { wallMsg("Поки що тут порожньо. Хтось має бути першим."); return; }
       var l = $("#wall-list"); l.innerHTML = "";
       rows.forEach(function (r) { var d = document.createElement("div"); d.className = "wall-item"; d.textContent = r[0].slice(0, 600); if (r[1]) { var s = document.createElement("span"); s.className = "w-d"; s.textContent = r[1].slice(0, 10); d.appendChild(s); } l.appendChild(d); });
-    }).catch(function () { wallMsg("Не вдалося завантажити стіну. Можливо, немає інтернету. Спробуй пізніше."); });
+    }).catch(function () { wallMsg("Стіна зараз відпочиває. Пропозиції все одно можна надсилати 🙂"); });
   }
   var PII = /[\w.+-]+@[\w-]+\.[\w.]+|(\+?\d[\d\s()-]{8,}\d)/;
   $("#wall-form").addEventListener("submit", function (e) {
@@ -353,6 +353,21 @@
       var on = function () { $$("span", bar).forEach(function (x) { x.classList.toggle("on", x === sp); }); bar.classList.add("has-on"); cap.textContent = sp.textContent + ": " + CAP[k]; };
       sp.addEventListener("mouseenter", on); sp.addEventListener("focus", on); sp.addEventListener("click", on);
     });
+  })();
+
+
+  /* ---------- share with a colleague, restart ---------- */
+  (function () {
+    var MSG = ($("#share-text") || {}).textContent || PAGE;
+    var st = $("#share-st");
+    function copy(t, ok) { (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { st.textContent = ok; }).catch(function () { st.textContent = "Не вдалося скопіювати. Ось посилання: " + PAGE; }); }
+    var go1 = $("#share-go");
+    if (go1) go1.onclick = function () {
+      if (navigator.share) navigator.share({ title: "Від чату до агента", text: MSG }).catch(function () {});
+      else copy(MSG, "Текст скопійовано. Встав колезі в Teams чи пошту 👍");
+    };
+    var c1 = $("#share-copy"); if (c1) c1.onclick = function () { copy(PAGE, "Посилання скопійовано 👍"); };
+    var r = $("#restart"); if (r) r.onclick = function () { go(0); };
   })();
 
   /* ---------- intro ---------- */

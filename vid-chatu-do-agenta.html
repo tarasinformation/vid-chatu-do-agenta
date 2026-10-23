@@ -799,6 +799,16 @@ button.chip:active { transform: translateY(1px); }
 button.ach { font: inherit; font-size: 12px; background: transparent; cursor: pointer; transition: transform .2s var(--ease-3), box-shadow .2s; }
 button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
 .ach-cap { font-size: 13.5px; color: var(--muted); min-height: 1.4em; text-align: center; }
+
+/* share + restart on the last slide */
+.share-card { margin-top: 20px; padding: clamp(20px, 4vw, 32px); border-radius: 20px; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow-sm); display: grid; gap: 14px; }
+.share-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.restart { justify-self: start; margin-top: 4px; }
+.share-text pre { white-space: pre-wrap; font-family: var(--font-body); font-size: 15px; line-height: 1.55; }
+
+/* ecosystem chips with logos */
+.vchip { display: inline-flex; align-items: center; gap: 8px; padding-left: 8px; }
+.vchip img { width: 22px; height: 22px; padding: 2px; border-radius: 6px; background: #fff; box-shadow: 0 0 0 1px rgb(0 0 0 / .06); object-fit: contain; }
 </style>
 <div class="intro" id="intro" role="dialog" aria-modal="true" aria-labelledby="intro-hi">
   <div class="intro-bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span><span class="grain"></span></div>
@@ -873,7 +883,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
       </svg>
     </figure>
     <div data-s="h0b" class="stack" style="gap:10px">
-      <h2>Спершу обери свій трек</h2>
+      <h2>Спершу обери свій трек 🧭</h2>
       <p class="meta">Трек підлаштований під твою роль: від нього залежать усі приклади у вправах. Передумаєш, перемкнеш будь-коли.</p>
       <div class="tracks" id="tracks" role="group" aria-label="Трек"></div>
     </div>
@@ -890,7 +900,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
   <div class="wrap">
     <div class="stage-head">
       <span class="stage-num">Етап 1 · 2 хв</span>
-      <h2>Сходи: від чату до агента</h2>
+      <h2>Сходи: від чату до агента 🪜</h2>
       <p class="col">Кожна сходинка вміє трохи більше й забирає в тебе частину ручної роботи. Угорі обери компанію, щоб побачити назви її продуктів. Потім натисни сходинку й подивися, як там виглядає твоя задача.</p>
     </div>
     <div class="stack">
@@ -908,7 +918,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
   <div class="wrap">
     <div class="stage-head">
       <span class="stage-num">Етап 2 · 4 хв · перша перемога</span>
-      <h2>Перегони: чат проти агента</h2>
+      <h2>Перегони: чат проти агента 🏁</h2>
       <p class="col" id="sim-intro"></p>
       <div class="row" style="justify-content:space-between"><p class="meta">Усі організації, акти й цифри вигадані. Збіги випадкові.</p><button class="skip" id="sim-reset">Почати симуляцію спочатку</button></div>
     </div>
@@ -951,7 +961,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
   <div class="wrap">
     <div class="stage-head">
       <span class="stage-num">Етап 3 · 6 хв</span>
-      <h2>Що в агента під капотом</h2>
+      <h2>Що в агента під капотом 🔧</h2>
       <p class="col">Агент не розумніший за чат. Це та сама модель, якій дали три речі: інструменти для роботи з файлами, право пробувати ще раз, доки не вийде, і файл із твоїми правилами. Тож налаштувати агента означає написати добру інструкцію, як новому колезі. Тільки цей колега прочитає її до кінця.</p>
     </div>
     <div class="stack">
@@ -1025,7 +1035,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
         </div>
       </div>
       <div data-s="in5" class="card stack ctx-card">
-        <h3>Чому агент іноді «тупить»: робоча пам'ять</h3>
+        <h3>Чому агент іноді «тупить»: робоча пам'ять 🧠</h3>
         <p class="col">Робоча пам'ять агента, її називають контекстом, має межу. Туди йде все: правила, кожен прочитаний файл, результат кожної дії, кожне твоє слово. Коли пам'ять забита, агент, як і ми після п'ятої наради поспіль, гірше пам'ятає початок і частіше помиляється.</p>
         <div class="ctx-bar" aria-label="Приклад того, з чого складається контекст сесії"><span class="c1" style="width:9%">правила</span><span class="c2" style="width:36%">прочитані файли</span><span class="c3" style="width:22%">результати дій</span><span class="c4" style="width:15%">розмова</span><span class="c5" style="width:18%">вільно</span></div>
         <p class="meta">Пропорції умовні. Найбільше місця з'їдають файли й результати дій, твої слова займають небагато.</p>
@@ -1037,7 +1047,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
         </div>
       </div>
       <div data-s="in6" class="card stack sub-card">
-        <h3>Субагенти: помічники, яких запускає сам агент</h3>
+        <h3>Субагенти: помічники, яких запускає сам агент 👥</h3>
         <p class="col">Субагент це той самий агент, запущений ще раз із чистою пам'яттю. Основний агент віддає йому шматок роботи й тим часом береже власну пам'ять.</p>
         <div class="sub-flow" aria-label="Як працюють субагенти">
           <div class="sf-you">Ти: задача</div><div class="sf-arr">↓</div>
@@ -1062,7 +1072,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
   <div class="wrap">
     <div class="stage-head">
       <span class="stage-num">Етап 4 · 15 хв</span>
-      <h2>Пишемо правила й навичку самі</h2>
+      <h2>Пишемо правила й навичку самі ✍️</h2>
       <p class="col">Файл правил CLAUDE.md пояснює агентові проєкт раз і назавжди: агент перечитує його на початку кожної роботи. Навичка це рецепт однієї задачі, який запускається однією командою. З кожним кроком підказок меншає, бо далі вже впораєшся без них.</p>
       <button class="skip" id="skip-rules">Я вже пишу такі файли, пропустити до навички</button>
     </div>
@@ -1091,7 +1101,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
   <div class="wrap">
     <div class="stage-head">
       <span class="stage-num">Етап 5 · 5 хв</span>
-      <h2>Що довірити агенту, а що лишити собі</h2>
+      <h2>Що довірити агенту, а що лишити собі ⚖️</h2>
       <p class="col">Агент сильний там, де результат можна перевірити: зібрати, звірити, оформити. Слабшає там, де треба знати те, чого немає у файлах, відповідати за результат чи ухвалювати рішення. І помиляється він так само впевнено, як відповідає правильно. Майже як дехто на нарадах.</p>
     </div>
     <div class="stack">
@@ -1101,7 +1111,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
         <div class="row"><button class="btn primary" id="sort-check">Перевірити</button><span id="sort-fb" class="meta" aria-live="polite"></span></div>
       </div>
       <div data-s="j2" class="card stack">
-        <h3>Спіймай агента: 2 помилки в чернетці</h3>
+        <h3>Спіймай агента: 2 помилки в чернетці 🔍</h3>
         <p class="meta" id="draft-src"></p>
         <div class="draft" id="draft"></div>
         <span id="draft-fb" class="meta" aria-live="polite"></span>
@@ -1127,7 +1137,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
   <div class="wrap">
     <div class="stage-head">
       <span class="stage-num">Етап 6 · 3 хв</span>
-      <h2>Не Claude єдиним</h2>
+      <h2>Не Claude єдиним 🌍</h2>
       <p class="col">Агенти мають також OpenAI, Google, Microsoft та інші компанії, і влаштовані вони так само: цикл, твої файли, файл правил. Тож усе, чого тут навчишся, знадобиться і там. Правила й навички здебільшого переїжджають без втрат, бо компанії домовилися про спільні формати (пояснення під таблицею).</p>
       <p class="meta">Станом на 23 жовтня 2026 року. Ринок міняється щомісяця, тож ціни перед вибором звіряй на сайті виробника.</p>
     </div>
@@ -1164,7 +1174,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
   <div class="wrap">
     <div class="stage-head">
       <span class="stage-num">Етап 7 · 30 хв + місяць практики</span>
-      <h2>Беремося до справи</h2>
+      <h2>Беремося до справи 🚀</h2>
       <p class="col">Спершу потренуйся на навчальній папці з вигаданими даними, а тоді переноси на свою роботу. Позначки «виконано» біля кроків бачиш тільки ти: вони живуть у твоєму браузері.</p>
     </div>
     <div class="stack">
@@ -1203,7 +1213,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
         <p class="alt" id="gen-alt"></p>
       </div>
 
-      <h3 data-s="st5" style="margin-top:20px">План на 30 днів</h3>
+      <h3 data-s="st5" style="margin-top:20px">План на 30 днів 🗓️</h3>
       <div data-s="st5" class="plan30" id="plan30"></div>
 
       <h3 data-s="st6" style="margin-top:20px">Тест: твоя задача для чату чи для агента</h3>
@@ -1213,7 +1223,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
         <div id="test-out" aria-live="polite"></div>
       </div>
 
-      <h3 data-s="st7" style="margin-top:20px">Шпаргалка на холодильник</h3>
+      <h3 data-s="st7" style="margin-top:20px">Шпаргалка на холодильник 🧲</h3>
       <div data-s="st7" class="cheat" id="cheat">
         <div class="card"><span class="w">Почати</span><ul><li>Застосунок Claude → вкладка Code</li><li>Local → Open folder… → папка з копіями файлів</li><li><b>Велика задача: спершу Plan</b> (агент пропонує план і нічого не змінює). Перевір і виправ план, потім погодь</li><li>Дрібна правка: Manual (питає перед кожною зміною)</li><li>Не відкривай домашню папку цілком</li></ul></div>
         <div class="card"><span class="w">Поставити задачу</span><ul><li><b>Мінімум:</b> що зробити, чого не чіпати, як перевірити</li><li>Повна версія: мета, матеріали, результат, правила, перевірка, де зупинитися</li><li>Відхиляєш зміну? Одразу напиши, як треба</li></ul></div>
@@ -1251,13 +1261,13 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
         <p class="meta">Ім'я лишається лише у твоєму браузері. Зроби знімок екрана й похвалися колегам. Скромність почекає до завтра.</p>
       </div>
       <div data-s="f2" class="card stack ai-prompt">
-        <h3>Продовж з будь-яким ШІ</h3>
+        <h3>Продовж з будь-яким ШІ 🤖</h3>
         <p class="col">Скопіюй цей промпт і встав у Claude, ChatGPT, Gemini чи Copilot. Він розповість ШІ, що вже пройдено й на якому треку, і попросить пояснювати далі простими словами, на твоїх задачах. Питай про все, що лишилося незрозумілим.</p>
         <div class="prompt"><pre id="ai-prompt"></pre><button class="btn small copy" data-copy="ai-prompt">Скопіювати</button></div>
         <p class="meta">У промпті немає твоїх даних, лише трек і пройдені етапи. Не вставляй у чужі ШІ робочі документи з персональними даними.</p>
       </div>
       <div data-s="f3" class="card stack wall">
-        <h3>Стіна пропозицій</h3>
+        <h3>Стіна пропозицій 💬</h3>
         <p class="col">Що додати, що пояснити краще, що зайве? Пиши чесно, ми витримаємо. Пропозиції анонімні: ми не збираємо ні імені, ні пошти. Після перевірки вони з'являються тут, і їх бачать усі, хто проходить практикум.</p>
         <form class="wall-form" id="wall-form">
           <textarea id="wall-text" maxlength="600" placeholder="Пропоную…" aria-label="Твоя пропозиція"></textarea>
@@ -1280,13 +1290,27 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
       </div>
       <div class="stack" style="gap:8px;position:relative;z-index:1"><button class="btn primary big" id="egg-big">Відкрити розбір</button><a class="btn" href="https://github.com/tarasinformation/vid-chatu-do-agenta/archive/refs/heads/main.zip" target="_blank" rel="noopener">⬇ Завантажити файли проєкту (.zip)</a><a class="skip" href="https://github.com/tarasinformation/vid-chatu-do-agenta" target="_blank" rel="noopener">Переглянути на GitHub</a></div>
     </div>
+    <div class="share-card" id="share-card">
+      <h2>Сподобалося? Поділися з колегою 💌</h2>
+      <div class="prompt share-text"><pre id="share-text">Слухай, глянь, яка крута штука 🔥
+
+Годинний практикум про те, як ШІ-агент робить роботу замість тебе: сам відкриває файли, звіряє цифри й пише чернетки, поки ти п'єш каву. Без встановлення, з прикладами для менеджерів, аналітиків і юристів.
+
+Мені зайшло. Тобі точно варто спробувати: https://tarasinformation.github.io/vid-chatu-do-agenta/</pre><button class="btn small copy" data-copy="share-text">Скопіювати</button></div>
+      <div class="share-row">
+        <button class="btn-lux small" id="share-go">Поділитися</button>
+        <button class="btn" id="share-copy">Лише посилання</button>
+      </div>
+      <p class="meta" id="share-st" aria-live="polite"></p>
+      <button class="btn-ghost restart" id="restart">↺ Почати спочатку</button>
+    </div>
   </div>
 </section>
 <section class="stage bonus" id="bonus" hidden>
   <div class="wrap">
     <div class="stage-head">
       <span class="stage-num">Бонус · за лаштунками</span>
-      <h2>Кухня цього інструмента</h2>
+      <h2>Кухня цього інструмента 🍳</h2>
       <p class="col">Цю сторінку від першого до останнього рядка зробив Claude Code за один робочий день, а людина ставила задачі. Жодного рядка коду руками. Нижче вся кухня: які рішення ухвалювали, хто що робив і де помилялися.</p>
     </div>
     <div class="stack">
@@ -1373,13 +1397,13 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
 <nav class="deckbar" id="deckbar" aria-label="Навігація презентацією">
   <button class="db-btn" id="db-prev" aria-label="Попередній слайд">←</button>
   <div class="db-mid"><span class="db-title" id="db-title"></span><span class="db-count" id="db-count"></span></div>
-  <button class="db-btn next" id="db-next" aria-label="Наступний слайд"><span id="db-next-t">Далі</span> →</button>
+  <button class="db-btn next" id="db-next" aria-label="Наступний слайд"><span id="db-next-t">Далі</span><span id="db-next-a"> →</span></button>
 </nav>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 
 
 <script>
-var SRC_LINES={"head.html": 802, "body.html": 577, "engine.js": 858, "deck.js": 376, "track_pm.js": 106, "track_an.js": 105, "track_law.js": 102, "build.py": 17, "vid-chatu-do-agenta.html": 2936};
+var SRC_LINES={"head.html": 812, "body.html": 591, "engine.js": 862, "deck.js": 391, "track_pm.js": 106, "track_an.js": 105, "track_law.js": 102, "build.py": 17, "vid-chatu-do-agenta.html": 2979};
 var TRACKS = {};
 TRACKS.pm = {
   who: "Менеджер проєктів", what: "Проміжний звіт донору: лограмка, індикатори, джерела", short: "звіт донору",
@@ -1769,10 +1793,14 @@ TRACKS.law = {
     { nm: "Агент повної дії", add: "+ власні програми й рецепти", split: 15, can: ["Обробляє десятки файлів за раз", "Пише собі невеликі програми (скрипти) для перевірки", "Запускає задачі за розкладом", "Ділить роботу між кількома агентами-помічниками (субагентами)"], cant: ["Інтерфейс трохи технічніший", "Треба уважно читати, на що агент просить дозволу"] }
   ];
   var vendor = "Anthropic", level = store.level != null ? store.level : 3;
+  /* company marks (site favicons), used only to label each ecosystem */
+  var VLOGO = {"Anthropic": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAZlBMVEX6+fUUFBMAAAD////9/Pj29fH///3///ttbWvY19QRERDe3dkNDQy9vLnv7urp6OQ6OjmJiIZOTUxEREO0tLEyMTCtrKmlpKEqKinR0Mx2dnSPjoyBgX5UVFJjYmHDw7+Yl5QdHRzi9ahqAAABsklEQVRYhe2V25aCMAxFtYFWsSBeEe/+/09Om6RQRoQ4j7M4LzYU0pPdps5mkyZN+t9KSD2B8Pv1ElVgUON4/U0GKBVqoV2gKSjhCwMrNUep1Ec5Rmolt2A2IUFlfKgyP95ouQP8wsmeoMmXKbEDk7MBt2ydNBWpvREmgK1tEpy9b9j5B3YrxJiscUFKotDSniwId9Jc/Ou2jDASFHWR1cDQqyvmOXjfmjGKEoRtL5b0u4ww5pIa4OZfVjeAk20xljiWYGSEbjFTqb9gNM9QblLE209jAUZt6dy6N+FO24EYr0KMyaPtnM6YMT7GaiCEtOpM04ZeEePBEtsRA1z3Ea3SkaIuMkcRRkI4VxpQPRifwxQgtAAL29ruEOMZi5sP1sDYnG0W9yRirAUYaePeRJcRY7wPWGCEb2KMfDKLzxYYoVWRMjrYHl06ihFeePMcFpFOWXMZjWIMmHLQjaBqtz/M159q0Iue855GXcQN/hEjv7vpJND3NusIxjDd/QcKHYWX0TBGMkjHLn5M/Y1dREXaV28NbinU8Vd611EobnBU/2lMSe9zPIGrRONJkyZN6uoHDOIUEM1IBJkAAAAASUVORK5CYII=", "OpenAI": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAY1BMVEX///8AAACYmJj5+fnz8/P29vaOjo4YGBjQ0NDDw8Pl5eXX19dQUFDLy8t1dXWfn5+tra0uLi47Ozu2trZfX19oaGhLS0s0NDQmJiaHh4dubm4gICBGRkbt7e0KCgoSEhJ+fn57FpRlAAACjUlEQVRYhe1WW4OyIBB1Ak0EL3kpM63+/6/8mAGR6kPdfdqHzsPGKnPmdhiMoi+++OPgaZ7L35tXJyB0v+MQN3Ao2M/tS213SoTMK4Wrqhjrc1tNu+0rgEdj19nZi4Xvs8+009gFc0fTizI55bsIdNizvXhoK5XSOh/1ugmbOUiAyoZCFVi86tQg2yY4ANAve2LQlf+qAai3zKfkCK3dDPC0ucxi0Jxi3f6KZom1bzPn+GbsOBj2EHgNM8HB+ZIjPVTE1gGs6Ir1AGfZzwT0LC4oFfxzZSSxFT0NWitRdPQJKiugSb+DexPlAGnQPqcEmUeQYkqXbMlE6QjCp0uLlvsEbDAKdrUkUUJQz5NONfIJEGVJ2dst9DBYA2HS8wlQBrGvJ95qaYbaUJnoFoLOhp7p3kFta5cADHsJlleUzWBib4N9aEx6/yegqXDA9RQUY260xx5wzD8ISoaCOuM/Q0iMzGaHZ1hN5SuBdp6dTI4iOFdae9qpc/UHAQbFTQ6BsaIniaIFp86FCPjbkPBQuBZJLJqyopXqnSA42PTO0TafpiGOYV7MDbAE+cpsjedT60phpPxCUCwz9wOT2T3r1pQCBuYTZGtDCQeyWnQr8X4c5WsRx7UDnaJM6V7spojTaaZ6OQKGvS6C9hheE9mTOHj1mAmO4mLlGEBs6Xn3OklcBLBuT2I0FdbDrLfNkrXNJHEHKgyxTB/rnWTQ04Tv4HbYvOLHN5mVnletii1zKqO3TfTLIMGBs+NmxSSgbqgQKUriMjd961ZzkFTru7rgT+/y4f3qneSDXZePmnr2L+6b97KHuHm2Z3UVNd1FjRTJ6f1L4eex3PZ9Hr0jsxSnX7h3HPqDN3j+v/jir+AfWRkZ4tp3YAUAAAAASUVORK5CYII=", "Google": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAApVBMVEVHcEz4+Pj8/Pz9/f38/Pz59/by8/Pz8/T7+/v9/f309PX29/fy8vP29/f///84qlfsUENHiPT8wBLrTD88rFpJivNEhvUqp006g/T7/PvT4P3rRjjqPSzg8Ojva1uWz6T7ugWWt/j4xcH+78jA4slxv4T85eTtW0v61tRctGaDrPdSj/YtffRmmvb1p6L+3I790mKuuUHykIg+nZ3G2Pv0lCs8o3o82clfAAAADnRSTlMAoetQ0/wdM7c/jGYSeQFEN8MAAAMjSURBVFiF5VdZm6IwEBQURBFQRGOGwxOvUWd0dvf//7QNEpLOAeLDPm09+QFV6erudGKn888wsgeeYTiOYXgD+2227TqmD2A67jsi3Z6vgdNtSXdNHf0ZRxuJgXb1Cr3BK77RRC9gNNLtxuVpEA3ZHLymF6i10W3H9/2aXKp8a38k2FvtFPrSR/tbNp7GSRLH4+y2l172Vf4IC19sDkk8HRNMCeI4OWyE13ikCAj532Qlu1IgSLIj/KIn8z349sHphE8l4uQBv/EkAzB1WTwGmDIkGbQpmnBA8g5Tkc4kEiEPTk0FLJk/1fPFSoAAMmA/TsZZdiCV1PFhCDZ/emP+ieWNRUzj/SYjEgrf9/mmGPIEMH6cgeY5Zhq+P2QCbILgRyWQ3IRv8VFmE5iqg+2KplDi16Dy4LInX2H4bIL40UDjcJUahAS/SeEPuIHG4cgp2K4KhdVBlzEdTHkffj0FwhVs2Q8FKXuH5Tb8LgXCb7DKZSHhcuYvy2bkkzCk2AKBxYxjUmB+fSmwahb45AbL8dptKzApBWZcoPuehUlNBG0tTCoBXxIAVaACX0DgMmegCkoS+TijfRDegcB5XeFcKixAGelYqw4OXHZieEepLwD7he31orSwZs8t2spsouOnQBQEua/BtYzg8sGeVLOdzxOShHtEgHYq/xcNYMZPumq08yxuV/egEIiCVObjTzUFbKyywuJTyScuZIVrGcBkwR1gNtL4tWSHIqqAlpCe0vWFncAvK+BYyGkIJA+nHXWL0xz9zJUUwoOBn6wWEyBBRPmSID8hFAR/ZnMpA/B8BXcLZuKZCVQgKEEUFmAfiLeMHlQIGD8gP4OIChAbk1QfgHi9ogqBjAj9gATIVy1wOvpphBR2EUEES+t0JHBzpPNzVQGhJZz1WOZ3+sJRQAqHRHoudBbW3LKESw6RWJ4Qw2kpNaan8uGeqjR2yyd2ysYY6vj6izbWHXK1F+5hqyMR16xfwG2hgN16PqlF7b+VCqYm/2/YaAq/gu3USmCn3V8327A0Gtgy2v/zG7mOqIEtx1Uv6M3oe0bPtAjMnuG9ytz/jb8i8rQexpJ/GAAAAABJRU5ErkJggg==", "Microsoft": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAG1BMVEVHcEz/uQB/ugAApO/yUCLyUCIApO9/ugD/uQAiNQNqAAAABXRSTlMAf4CAgMY5tpAAAABASURBVFiF7cy5DQAhAMRAH3//FcM1sBESiaeAoUcNyowwMDAwMDAwuBy0jDNEvFcz+DJG9AcrMjAwMDAwMLgcbA4XXcky94g6AAAAAElFTkSuQmCC", "\u0412\u0456\u0434\u043a\u0440\u0438\u0442\u0456": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTgxODFiIiBzdHJva2Utd2lkdGg9IjIuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNOCA3bC01IDUgNSA1TTE2IDdsNSA1LTUgNU0xMy41IDVsLTMgMTQiLz48L3N2Zz4="};
   var vd = $("#vendors");
   Object.keys(VENDORS).forEach(function (v) {
-    var b = el("button", { class: "chip", "aria-pressed": v === vendor ? "true" : "false", text: v });
-    b.onclick = function () { vendor = v; Array.prototype.forEach.call(vd.children, function (c) { c.setAttribute("aria-pressed", c.textContent === v ? "true" : "false"); }); renderLadder(); };
+    var b = el("button", { class: "chip vchip", "data-v": v, "aria-pressed": v === vendor ? "true" : "false" });
+    if (VLOGO[v]) b.appendChild(el("img", { src: VLOGO[v], alt: "", width: "18", height: "18" }));
+    b.appendChild(el("span", { text: v }));
+    b.onclick = function () { vendor = v; Array.prototype.forEach.call(vd.children, function (c) { c.setAttribute("aria-pressed", c.getAttribute("data-v") === v ? "true" : "false"); }); renderLadder(); };
     vd.appendChild(b);
   });
   function renderLadder() {
@@ -2568,7 +2596,7 @@ TRACKS.law = {
 
   /* Wall of suggestions: Google Form (anonymous, no sign-in) + a separate public sheet with approved rows only.
      Fill these after setup, see docs/wall-setup.md. Empty values = the wall shows "coming soon". */
-  var WALL = { form: "", entry: "", sheet: "" };
+  var WALL = { form: "https://docs.google.com/forms/d/e/1FAIpQLSdUEg-SLd39tqYp0PKYFPY3C8qNrlDH2hN_qOxq3uXEB17d2A/formResponse", entry: "entry.1425467523", sheet: "1S9etO14Bz9nE7KIMgDSj7IlR-C1Pcg0Bis-3p_8A3ls" };
 
   var DKEY = "vid-chatu-do-agenta-deck";
   var D = {};
@@ -2681,9 +2709,9 @@ TRACKS.law = {
     $("#db-title").textContent = sl.title;
     $("#db-count").textContent = (cur + 1) + " / " + n;
     $("#db-prev").disabled = cur === 0;
-    $("#db-next").disabled = cur === n - 1;
-    $("#db-next-t").textContent = cur === 0 ? "Почнімо" : cur === n - 1 ? "Кінець" : "Далі";
-    $("#db-next").classList.toggle("nudge", cur === 0);
+    $("#db-next").disabled = false;
+    $("#db-next-t").textContent = cur === 0 ? "Почнімо" : cur === n - 1 ? "Почати спочатку ↺" : "Далі";
+    $("#db-next").classList.toggle("nudge", cur === 0); $("#db-next-a").hidden = cur === n - 1;
     var p = $("#deck-prog"); if (p) p.style.width = (cur / (n - 1) * 100) + "%";
     $$("#rail a").forEach(function (a) { var h = (a.getAttribute("href") || "").slice(1); a.classList.toggle("cur", h === sl.stage); });
   }
@@ -2696,7 +2724,7 @@ TRACKS.law = {
 
   /* navigation */
   $("#db-prev").onclick = function () { go(cur - 1); };
-  $("#db-next").onclick = function () { go(cur + 1); };
+  $("#db-next").onclick = function () { if (cur >= slides.length - 1) go(0); else go(cur + 1); };
   document.addEventListener("keydown", function (e) {
     if (!document.body.classList.contains("deck") || e.altKey || e.ctrlKey || e.metaKey) return;
     var t = e.target, tag = t && t.tagName;
@@ -2810,7 +2838,7 @@ TRACKS.law = {
       if (!rows.length) { wallMsg("Поки що тут порожньо. Хтось має бути першим."); return; }
       var l = $("#wall-list"); l.innerHTML = "";
       rows.forEach(function (r) { var d = document.createElement("div"); d.className = "wall-item"; d.textContent = r[0].slice(0, 600); if (r[1]) { var s = document.createElement("span"); s.className = "w-d"; s.textContent = r[1].slice(0, 10); d.appendChild(s); } l.appendChild(d); });
-    }).catch(function () { wallMsg("Не вдалося завантажити стіну. Можливо, немає інтернету. Спробуй пізніше."); });
+    }).catch(function () { wallMsg("Стіна зараз відпочиває. Пропозиції все одно можна надсилати 🙂"); });
   }
   var PII = /[\w.+-]+@[\w-]+\.[\w.]+|(\+?\d[\d\s()-]{8,}\d)/;
   $("#wall-form").addEventListener("submit", function (e) {
@@ -2911,6 +2939,21 @@ TRACKS.law = {
       var on = function () { $$("span", bar).forEach(function (x) { x.classList.toggle("on", x === sp); }); bar.classList.add("has-on"); cap.textContent = sp.textContent + ": " + CAP[k]; };
       sp.addEventListener("mouseenter", on); sp.addEventListener("focus", on); sp.addEventListener("click", on);
     });
+  })();
+
+
+  /* ---------- share with a colleague, restart ---------- */
+  (function () {
+    var MSG = ($("#share-text") || {}).textContent || PAGE;
+    var st = $("#share-st");
+    function copy(t, ok) { (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { st.textContent = ok; }).catch(function () { st.textContent = "Не вдалося скопіювати. Ось посилання: " + PAGE; }); }
+    var go1 = $("#share-go");
+    if (go1) go1.onclick = function () {
+      if (navigator.share) navigator.share({ title: "Від чату до агента", text: MSG }).catch(function () {});
+      else copy(MSG, "Текст скопійовано. Встав колезі в Teams чи пошту 👍");
+    };
+    var c1 = $("#share-copy"); if (c1) c1.onclick = function () { copy(PAGE, "Посилання скопійовано 👍"); };
+    var r = $("#restart"); if (r) r.onclick = function () { go(0); };
   })();
 
   /* ---------- intro ---------- */
