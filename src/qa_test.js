@@ -15,9 +15,9 @@ async function rest(k){ const log=[]; const T=TRACKS[k];
   T.l3.forEach((q,i)=>{ document.getElementById('l3-'+i).value=String(q[2]); });
   b=document.querySelector('#rules-box button.primary'); b.click(); await sleep(30); log.push('l3:'+document.querySelector('#rules-box .fb').className); b.click(); await sleep(30);
   const ta=document.getElementById('my-rules'); ta.value='донор проєкт тис. грн джерело файл мова стиль термін не змінюй не вигадуй закон редакція формули чинна медіана посилання питання'; ta.dispatchEvent(new Event('input')); await sleep(400); log.push('l4hits:'+document.querySelectorAll('.checklist li.hit').length);
-  for(let pass=0;pass<60;pass++){ const lis=[...document.querySelectorAll('#skill-box .order li')]; let moved=false;
-    for(let i=0;i<lis.length-1;i++){ const a=T.steps.indexOf(lis[i].children[1].textContent), c=T.steps.indexOf(lis[i+1].children[1].textContent); if(a>c){ lis[i].querySelector('button[aria-label="Нижче"]').click(); moved=true; await sleep(10); break; } } if(!moved) break; }
-  document.querySelector('#skill-box button.primary').click(); await sleep(50); log.push('order:'+document.querySelector('#skill-box .fb').className); document.querySelector('#skill-box button.primary').click(); await sleep(100);
+  { const wrong=[...document.querySelectorAll('#skill-box .rcp-card')].find(c=>c.textContent!==T.steps[0]); wrong&&wrong.click(); await sleep(20); log.push('miss:'+/Не зараз/.test(document.querySelector('#skill-box .fb').textContent));
+    for(let i=0;i<T.steps.length;i++){ const c=[...document.querySelectorAll('#skill-box .rcp-card')].find(c=>c.textContent===T.steps[i]); c&&c.click(); await sleep(10); }
+    log.push('order:'+document.querySelector('#skill-box .fb').className); document.querySelector('#skill-box button.primary').click(); await sleep(100); }
   const inp=document.getElementById('skill-input'); inp.value='/'+T.skill+' '+T.arg; inp.form.requestSubmit(); await sleep(3000);
   log.push('err:'+/не знайдено/.test(document.getElementById('skill-term').textContent));
   document.querySelector('#skill-help button')?.click(); await sleep(5000); log.push('skill:'+/Навичка працює/.test(document.getElementById('skill-help').textContent));

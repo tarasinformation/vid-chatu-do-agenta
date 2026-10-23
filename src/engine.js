@@ -64,8 +64,8 @@
     "Відкриті": ["—", "—", "Goose (застосунок)", "OpenCode, Cline, Aider"]
   };
   var LEVELS = [
-    { nm: "Чат", add: "розмова", split: 90, can: ["Пише й переписує текст", "Пояснює, відповідає на питання"], cant: ["Не бачить ваших файлів", "Не перевіряє себе", "Не пам'ятає правил між розмовами"] },
-    { nm: "Проєкти", add: "+ пам'ять", split: 72, can: ["Пам'ятає документи й інструкції проєкту", "Не треба повторювати правила"], cant: ["Не працює з папкою на вашому комп'ютері", "Не перевіряє цифри й факти сам"] },
+    { nm: "Чат", add: "розмова", split: 90, can: ["Пише й переписує текст", "Пояснює, відповідає на питання"], cant: ["Не бачить твоїх файлів", "Не перевіряє себе", "Не пам'ятає правил між розмовами"] },
+    { nm: "Проєкти", add: "+ пам'ять", split: 72, can: ["Пам'ятає документи й інструкції проєкту", "Не треба повторювати правила"], cant: ["Не працює з папкою на твоєму комп'ютері", "Не перевіряє цифри й факти сам"] },
     { nm: "Агент документів", add: "+ дія з файлами", split: 38, can: ["Сам відкриває й створює файли", "Працює кроками, показує план", "Підключається до пошти, календаря, Office"], cant: ["Уміє лише те, що закладено в застосунок", "Не пише собі програм для перевірки"] },
     { nm: "Агент повної дії", add: "+ власні програми й рецепти", split: 15, can: ["Обробляє десятки файлів за раз", "Пише собі невеликі програми (скрипти) для перевірки", "Запускає задачі за розкладом", "Ділить роботу між кількома агентами-помічниками (субагентами)"], cant: ["Інтерфейс трохи технічніший", "Треба уважно читати, на що агент просить дозволу"] }
   ];
@@ -80,13 +80,13 @@
     var box = $("#ladder-steps"); box.innerHTML = "";
     LEVELS.forEach(function (L, i) {
       var b = el("button", { class: "step", "aria-pressed": i === level ? "true" : "false" });
-      b.innerHTML = '<span class="lvl">рівень ' + (i + 1) + '</span><span class="nm">' + L.nm + '</span><span class="add">' + L.add + '</span><span class="mini"><span class="mb"><i style="width:' + L.split + '%"></i><b></b></span><span>руками: ви ' + L.split + '%</span></span><span class="prod">' + VENDORS[vendor][i] + '</span>';
+      b.innerHTML = '<span class="lvl">рівень ' + (i + 1) + '</span><span class="nm">' + L.nm + '</span><span class="add">' + L.add + '</span><span class="mini"><span class="mb"><i style="width:' + L.split + '%"></i><b></b></span><span>руками: ти ' + L.split + '%</span></span><span class="prod">' + VENDORS[vendor][i] + '</span>';
       b.onclick = function () { level = i; store.level = i; save(); renderLadder(); mark("ladder"); };
       box.appendChild(b);
     });
     var L = LEVELS[level];
     $("#lvl-detail").innerHTML = '<div class="stack" style="gap:10px"><span class="eyebrow">Рівень ' + (level + 1) + ' · ' + VENDORS[vendor][level] + '</span><h3>' + L.nm + ': ' + T.doc + '</h3><p>' + T.how[level] + '</p>' +
-      '<div class="split" aria-label="Хто робить роботу"><div class="split-bar"><span class="h" style="width:' + L.split + '%"></span><span class="a" style="width:' + (100 - L.split) + '%"></span></div><div class="split-lbl"><span>Ви: ' + L.split + '%</span><span>Агент: ' + (100 - L.split) + '%</span></div><p class="meta">Відсотки умовні. Вони показують напрям, а не точний вимір.</p></div></div>' +
+      '<div class="split" aria-label="Хто робить роботу"><div class="split-bar"><span class="h" style="width:' + L.split + '%"></span><span class="a" style="width:' + (100 - L.split) + '%"></span></div><div class="split-lbl"><span>Ти: ' + L.split + '%</span><span>Агент: ' + (100 - L.split) + '%</span></div><p class="meta">Відсотки умовні. Це компас, а не бухгалтерія.</p></div></div>' +
       '<div><ul class="can">' + L.can.map(function (x) { return "<li>" + x + "</li>"; }).join("") + '</ul><ul class="cant">' + L.cant.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul></div>";
   }
 
@@ -114,7 +114,7 @@
   }
   function renderChatAct() {
     chatAct.innerHTML = "";
-    if (chatStep >= T.chat.length) { chatAct.appendChild(el("p", { class: "meta", text: "Шлях у чаті пройдено. Тепер дайте той самий запит агентові в правій колонці." })); return; }
+    if (chatStep >= T.chat.length) { chatAct.appendChild(el("p", { class: "meta", text: "Шлях у чаті пройдено. Тепер дай той самий запит агентові в правій колонці." })); return; }
     var s = T.chat[chatStep];
     var b = el("button", { class: "btn" + (s[1] ? " manual" : " primary"), text: (s[1] ? "✋ " : "") + s[0] });
     b.onclick = function () {
@@ -153,7 +153,7 @@
     var s = T.agent[agStep];
     agentLine(s);
     if (s[0] === "ask") {
-      agAct.appendChild(el("p", { class: "meta", text: "Агент зупинився: це рішення людини." }));
+      agAct.appendChild(el("p", { class: "meta", text: "Агент зупинився: це рішення людини. Він знає, де зупинитися." }));
       s[3].forEach(function (lab, i) {
         var b = el("button", { class: "btn", text: lab });
         b.onclick = function () { answer = i; cnt.am++; setCnt(); push(agLog, "msg u", lab); agStep++; runAgent(); };
@@ -173,7 +173,7 @@
   }
   function renderAgentStart() {
     agAct.innerHTML = "";
-    if (!chatDone) agAct.appendChild(el("p", { class: "meta", text: "Радимо спершу пройти ліву колонку (чат), щоб відчути різницю." }));
+    if (!chatDone) agAct.appendChild(el("p", { class: "meta", text: "Спершу пройди ліву колонку (чат), щоб відчути різницю." }));
     var b = el("button", { class: "btn primary", text: "Дати агенту той самий запит" });
     b.onclick = function () { if (agRunning) return; agRunning = true; push(agLog, "msg u", T.request); cnt.am++; setCnt(); runAgent(); };
     agAct.appendChild(b);
@@ -187,7 +187,7 @@
       if (T.chain && T.chain.length) rv.innerHTML += "<div class='chain' aria-label='Ланцюжок перевірки агента'>" + T.chain.map(function (c, i) { return "<span class='ch" + (i === T.chain.length - 1 ? " last" : "") + "' style='animation-delay:" + (i * 0.25) + "s'>" + c + "</span>"; }).join("<span class='arr'>→</span>") + "</div>";
     }
     var w = $("#why"); w.innerHTML = "";
-    [["Не бачить файлів", "У агента є інструменти: він сам відкриває файли."], ["Не перевіряє себе", "Агент працює циклом: зробив крок, подивився на результат, виправив."], ["Забуває правила", "На початку кожної роботи агент читає файл із вашими правилами."]].forEach(function (x, i) {
+    [["Не бачить файлів", "У агента є інструменти: він сам відкриває файли."], ["Не перевіряє себе", "Агент працює циклом: зробив крок, подивився на результат, виправив."], ["Забуває правила", "На початку кожної роботи агент читає файл із твоїми правилами."]].forEach(function (x, i) {
       w.appendChild(el("div", { class: "card" }, "<h3>" + x[0] + "</h3><p>" + T.why[i] + " <b>" + x[1] + "</b></p>"));
     });
     $("#nq-title").textContent = T.nextTitle;
@@ -195,9 +195,9 @@
     var nqLines = function () {
       return ["<span class='c'>Знайшов навичку: .claude/skills/" + T.skill + "/SKILL.md</span>", "<span class='c'>Читаю правила проєкту: CLAUDE.md</span>"]
         .concat(T.steps.map(function (s, i) { return "Крок " + (i + 1) + " з " + T.steps.length + ": " + s; }))
-        .concat(["Прошу дозволу записати результат… <span class='ok'>дозволено</span>", "<span class='ok'>Готово. Нижче список того, що треба перевірити вам.</span>"]);
+        .concat(["Прошу дозволу записати результат… <span class='ok'>дозволено</span>", "<span class='ok'>Готово. Нижче список того, що треба перевірити тобі.</span>"]);
     };
-    var nqBox = $("#nq-cmd"); nqBox.innerHTML = "<span class='p'>&gt;</span> " + T.nextCmd + "\n<span class='c'>Натисніть кнопку нижче, щоб побачити, що робить агент після цієї команди.</span>";
+    var nqBox = $("#nq-cmd"); nqBox.innerHTML = "<span class='p'>&gt;</span> " + T.nextCmd + "\n<span class='c'>Натисни кнопку нижче, щоб побачити, що робить агент після цієї команди.</span>";
     var nqGen = simGen;
     $("#nq-play").onclick = function () {
       var L = nqLines(), i = 0; nqBox.innerHTML = "<span class='p'>&gt;</span> " + T.nextCmd + "\n";
@@ -205,7 +205,7 @@
     };
     var bars = $("#cmp-bars"); bars.innerHTML = "";
     var max = Math.max(cnt.cm, 1);
-    [["Ваших ручних дій", cnt.cm, cnt.am], ["Копіювань", cnt.cc, cnt.ac], ["Неперевірених тверджень", cnt.cu, cnt.au]].forEach(function (r) {
+    [["Твоїх ручних дій", cnt.cm, cnt.am], ["Копіювань", cnt.cc, cnt.ac], ["Неперевірених тверджень", cnt.cu, cnt.au]].forEach(function (r) {
       var row = el("div", { class: "cbar" });
       row.innerHTML = "<span class='cl'>" + r[0] + "</span><div class='cb'><span class='c1' style='width:0'></span><b>" + r[1] + "</b></div><div class='cb'><span class='c2' style='width:0'></span><b>" + r[2] + "</b></div>";
       bars.appendChild(row);
@@ -223,12 +223,12 @@
     var box = $("#predict"); box.innerHTML = "";
     if (pi >= T.predict.length) {
       lightNode(-1);
-      box.innerHTML = "<span class='eyebrow'>Готово</span><h3>Ось і вся «магія»</h3><p>Думає, діє, дивиться, вирішує, чи готово. Кожен крок простий. Агент повторює коло, доки результат не перевірено. Там, де потрібне ваше рішення, він зупиняється й питає.</p>";
+      box.innerHTML = "<span class='eyebrow'>Готово</span><h3>Ось і вся «магія»</h3><p>Думає, діє, дивиться, вирішує, чи готово. Кожен крок простий. Агент повторює коло, доки результат не перевірено. Там, де потрібне твоє рішення, він зупиняється й питає. Фокусники так не працюють.</p>";
       var again = el("button", { class: "btn small", text: "Пройти ще раз" }); again.onclick = function () { pi = 0; renderPredict(); }; box.appendChild(el("div", { class: "row" })).appendChild(again);
       mark(null, "loop"); return;
     }
     var P = T.predict[pi]; lightNode(P.node);
-    box.appendChild(el("span", { class: "eyebrow", text: "Передбачте наступний крок · " + (pi + 1) + "/" + T.predict.length }));
+    box.appendChild(el("span", { class: "eyebrow", text: "Передбач наступний крок · " + (pi + 1) + "/" + T.predict.length }));
     box.appendChild(el("p", { text: P.q }));
     var opts = el("div", { class: "quiz-opts" }), fb = el("div", { "aria-live": "polite" });
     P.o.forEach(function (o, i) {
@@ -257,42 +257,51 @@
   MATCH.forEach(function (m, i) {
     var l = el("label"); l.appendChild(el("span", { text: m[0] }));
     var s = el("select", { id: "match-" + i, "aria-label": m[0] });
-    s.innerHTML = "<option value=''>Оберіть…</option>" + ["Інструкції", "Цикл", "Модель", "Інструменти"].map(function (x) { return "<option>" + x + "</option>"; }).join("");
+    s.innerHTML = "<option value=''>Обери…</option>" + ["Інструкції", "Цикл", "Модель", "Інструменти"].map(function (x) { return "<option>" + x + "</option>"; }).join("");
     l.appendChild(s); mb.appendChild(l);
   });
   $("#match-check").onclick = function () {
     var ok = 0; MATCH.forEach(function (m, i) { var s = $("#match-" + i), g = s.value === m[1]; s.classList.toggle("ok", g); s.classList.toggle("no", !g); if (g) ok++; });
-    $("#match-fb").textContent = ok === 4 ? "Усі 4 правильно. Тепер ви знаєте, з чого складається будь-який агент." : "Правильно " + ok + " з 4. Підказка: інструкції лежать у файлах, а цикл означає повторення кроків.";
+    $("#match-fb").textContent = ok === 4 ? "Усі 4 правильно. Тепер ти знаєш, з чого складається будь-який агент. Інструкція до праски довша." : "Правильно " + ok + " з 4. Підказка: інструкції лежать у файлах, а цикл означає повторення кроків.";
     if (ok === 4) mark("inside");
   };
 
   var current;
+  function treeExtra() {
+    var esc = function (x) { return String(x).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); };
+    return {
+      __data: [T.dataFolder, "твої матеріали",
+        "<span class='h'># Твої матеріали</span>\nТе, з чим агент працює: редакції, дані, листи, шаблони.\nВін їх <b>читає, але не змінює</b>. Це правило записано в CLAUDE.md,\nтож оригінали лишаються цілими, навіть якщо щось піде не так.\n\n<span class='h'>## Що всередині</span>\n" + (T.chips || []).map(function (c) { return "· " + esc(c); }).join("\n")],
+      __out: [T.outFolder, "результат роботи",
+        "<span class='h'># Готове</span>\nСюди агент кладе те, що зробив: чернетки, таблиці, звіт про перевірку.\nОкрема папка означає, що нове ніколи не перезаписує старе.\n\n<span class='h'>## Як із цим жити</span>\n· Відкриваєш, читаєш, правиш як звичайний документ\n· Помітив агент сумнівне місце, там стоїть [ПОТРІБНІ ДАНІ]\n· Надсилати далі вирішуєш ти. Агент такої звички не має"]
+    };
+  }
   function renderTree() {
-    var tree = $("#tree"); tree.innerHTML = "";
-    if (!T.files[current]) current = Object.keys(T.files)[0];
+    var tree = $("#tree"), X = treeExtra(); tree.innerHTML = "";
+    if (!T.files[current] && !X[current]) current = Object.keys(T.files)[0];
     tree.appendChild(el("div", { class: "dim", text: T.folder }));
-    Object.keys(T.files).forEach(function (f) {
-      var b = el("button", { "aria-pressed": f === current ? "true" : "false" }, "📄 " + f + "<span class='note-s'>" + T.files[f][0] + "</span>");
-      b.onclick = function () { current = f; renderTree(); };
+    var add = function (key, icon, name, note) {
+      var b = el("button", { "aria-pressed": key === current ? "true" : "false" }, icon + " " + name + "<span class='note-s'>" + note + "</span>");
+      b.onclick = function () { current = key; renderTree(); };
       tree.appendChild(b);
-    });
-    tree.appendChild(el("div", { class: "dim", text: T.dataFolder }));
-    tree.appendChild(el("div", { class: "dim", text: T.outFolder }));
-    $("#file-view").innerHTML = T.files[current][1];
+    };
+    Object.keys(T.files).forEach(function (f) { add(f, "📄", f, T.files[f][0]); });
+    ["__data", "__out"].forEach(function (k) { var parts = X[k][0].replace(/^📁\s*/, "").split(/\s{2,}/); add(k, "📁", parts[0], (parts[1] ? parts[1] + " · " : "") + X[k][1]); });
+    $("#file-view").innerHTML = (T.files[current] || X[current])[current in X ? 2 : 1];
   }
 
   /* ---------- 4. rules (faded) ---------- */
-  var LV = ["Повний приклад", "Без одного розділу", "Лише заголовки", "Ваш файл"];
+  var LV = ["Повний приклад", "Без одного розділу", "Лише заголовки", "Твій файл"];
   function lv() { return ts().lv || 0; }
-  function renderLevels() { var b = $("#levels"); b.innerHTML = ""; LV.forEach(function (n, i) { b.appendChild(el("span", { class: i === lv() ? "on" : (i < lv() ? "done" : ""), text: (i < lv() ? "✓ " : (i + 1) + ". ") + n })); }); }
+  function renderLevels() { var b = $("#levels"); b.innerHTML = ""; LV.forEach(function (n, i) { var past = i < lv(), x = el(past ? "button" : "span", { class: i === lv() ? "on" : (past ? "done" : ""), text: (past ? "✓ " : (i + 1) + ". ") + n }); if (past) { x.title = "Повернутися до цього рівня"; x.onclick = function () { ts().lv = i; save(); renderRules(); }; } b.appendChild(x); }); }
   function nextLevel() { ts().lv = lv() + 1; save(); renderRules(); }
   function claudeBody() { return T.files["CLAUDE.md"][1]; }
   function renderRules() {
     renderLevels();
     var box = $("#rules-box"); box.innerHTML = ""; var L = lv();
     if (L === 0) {
-      box.appendChild(el("h3", { text: "Крок 1. Розгляньте готовий файл правил" }));
-      box.appendChild(el("p", { class: "meta", text: "Це той самий CLAUDE.md, що ви бачили всередині агента. Натисніть розділ або наведіть на нього: кожен відповідає на питання, яке агент інакше поставив би вам." }));
+      box.appendChild(el("h3", { text: "Крок 1. Розглянь готовий файл правил" }));
+      box.appendChild(el("p", { class: "meta", text: "Це той самий CLAUDE.md, що й на схемі агента. Натисни розділ або наведи на нього: кожен відповідає на питання, яке агент інакше поставив би тобі." }));
       var wrap = el("div", { class: "annot" });
       var pre = el("pre", { class: "file" }); var side = el("div", { class: "annot-side", "aria-live": "polite" });
       var parts = claudeBody().split(/(?=<span class='h'>## )/);
@@ -305,12 +314,12 @@
         }
         pre.appendChild(d);
       });
-      side.innerHTML = "<p class='meta'>← Оберіть розділ</p>";
+      side.innerHTML = "<p class='meta'>← Обери розділ</p>";
       wrap.appendChild(pre); wrap.appendChild(side); box.appendChild(wrap);
       var b = el("button", { class: "btn primary", text: "Зрозуміло, далі" }); b.onclick = nextLevel; box.appendChild(el("div", { class: "row" })).appendChild(b);
     } else if (L === 1) {
-      box.appendChild(el("h3", { text: "Крок 2. Допишіть розділ «Чого не робити»" }));
-      box.appendChild(el("p", { class: "meta", text: "Ось той самий файл, але без останнього розділу. Оберіть 2 пункти з 4, які треба туди дописати. Два інші пункти звучать розумно, але шкодять." }));
+      box.appendChild(el("h3", { text: "Крок 2. Допиши розділ «Чого не робити»" }));
+      box.appendChild(el("p", { class: "meta", text: "Ось той самий файл, але без останнього розділу. Обери 2 пункти з 4, які треба туди дописати. Два інші звучать розумно, але шкодять. Як і чимало порад." }));
       box.appendChild(el("pre", { class: "file" }, claudeBody().split("<span class='h'>## Чого не робити</span>")[0] + "<span class='h'>## Чого не робити</span>\n<span class='c'>- ?\n- ?</span>"));
       var g = el("div", { class: "opts" });
       T.noDo.forEach(function (o, i) {
@@ -327,7 +336,7 @@
         var picked = T.noDo.map(function (o, i) { return $("#nd-" + i).checked; });
         var n = picked.filter(Boolean).length;
         fb.hidden = false;
-        if (n !== 2) { fb.className = "fb bad"; fb.textContent = "Оберіть рівно два пункти."; return; }
+        if (n !== 2) { fb.className = "fb bad"; fb.textContent = "Обери рівно два пункти."; return; }
         var ok = T.noDo.every(function (o, i) { return picked[i] === o[1]; });
         T.noDo.forEach(function (o, i) {
           var lab = g.children[i], w = $("#ndw-" + i);
@@ -335,17 +344,17 @@
           w.textContent = (o[1] ? "✓ Потрібен. " : "✕ Не підходить. ") + (o[2] || "");
         });
         fb.className = "fb " + (ok ? "good" : "bad");
-        fb.textContent = ok ? T.noDoFb : "Не зовсім. Під кожним пунктом тепер є пояснення. Виправте вибір і перевірте ще раз.";
+        fb.textContent = ok ? T.noDoFb : "Не зовсім. Під кожним пунктом тепер є пояснення. Виправ вибір і перевір ще раз.";
         if (ok) { b2.textContent = "Далі"; b2.onclick = nextLevel; }
       };
       box.appendChild(fb); var rw = el("div", { class: "row" }); rw.appendChild(b2); rw.appendChild(cnt1); box.appendChild(rw);
     } else if (L === 2) {
-      box.appendChild(el("h3", { text: "Крок 3. Нова задача: оберіть рядок під кожен заголовок" }));
+      box.appendChild(el("h3", { text: "Крок 3. Нова задача: обери рядок під кожен заголовок" }));
       box.appendChild(el("p", { class: "meta", text: T.l3title }));
       var sels = [];
       T.l3.forEach(function (q, i) {
         var w = el("label", { class: "stack", style: "gap:4px" }); w.appendChild(el("span", { class: "mono", text: q[0] }));
-        var s = el("select", { id: "l3-" + i }); s.innerHTML = "<option value=''>Оберіть рядок…</option>" + q[1].map(function (x, j) { return "<option value='" + j + "'>" + x + "</option>"; }).join("");
+        var s = el("select", { id: "l3-" + i }); s.innerHTML = "<option value=''>Обери рядок…</option>" + q[1].map(function (x, j) { return "<option value='" + j + "'>" + x + "</option>"; }).join("");
         w.appendChild(s); box.appendChild(w); sels.push(s);
       });
       var fb3 = el("p", { class: "fb", "aria-live": "polite" }); fb3.hidden = true;
@@ -353,15 +362,15 @@
       b3.onclick = function () {
         var ok = T.l3.filter(function (q, i) { return sels[i].value !== "" && +sels[i].value === q[2]; }).length;
         fb3.hidden = false; fb3.className = "fb " + (ok === 3 ? "good" : "bad");
-        fb3.textContent = ok === 3 ? "Усі 3 правильно. Добре правило конкретне: одиниці, назва файлу, сторінка. «Пиши гарно» агентові нічого не каже." : "Правильно " + ok + " з 3. Шукайте рядок, який агент може виконати без уточнювальних питань.";
+        fb3.textContent = ok === 3 ? "Усі 3 правильно. Добре правило конкретне: одиниці, назва файлу, сторінка. «Пиши гарно» агентові нічого не каже. Людям, чесно кажучи, теж." : "Правильно " + ok + " з 3. Шукай рядок, який агент може виконати без уточнювальних питань.";
         if (ok === 3) { b3.textContent = "Далі"; b3.onclick = nextLevel; }
       };
       box.appendChild(fb3); box.appendChild(el("div", { class: "row" })).appendChild(b3);
     } else {
-      box.appendChild(el("h3", { text: "Крок 4. Напишіть правила для своєї задачі" }));
-      box.appendChild(el("p", { class: "meta", text: "Напишіть кілька рядків правил для будь-якої вашої задачі. Праворуч список того, що має бути в добрих правилах. Нижче видно, як відповів би агент без правил і з вашими. Порівняння оновлюється, поки ви пишете." }));
+      box.appendChild(el("h3", { text: "Крок 4. Напиши правила для своєї задачі" }));
+      box.appendChild(el("p", { class: "meta", text: "Напиши кілька рядків правил для будь-якої своєї задачі. Праворуч список того, що має бути в добрих правилах. Нижче видно, як відповів би агент без правил і з твоїми. Порівняння оновлюється, поки ти пишеш." }));
       var wrap4 = el("div", { class: "cmp" });
-      var ta = el("textarea", { id: "my-rules", placeholder: T.l4placeholder, "aria-label": "Ваші правила" });
+      var ta = el("textarea", { id: "my-rules", placeholder: T.l4placeholder, "aria-label": "Твої правила" });
       ta.value = ts().myRules || "";
       var cl = el("ul", { class: "checklist" });
       T.chk.forEach(function (c) { cl.appendChild(el("li", { text: c[0] })); });
@@ -372,13 +381,13 @@
         var f = T.chk.map(function (c) { return c[1].test(ta.value); });
         f.forEach(function (h, i) { cl.children[i].classList.toggle("hit", h); });
         var o = T.out(f);
-        out.innerHTML = "<div class='card'><span class='eyebrow'>Без правил</span><p style='margin-top:6px'>" + o[0] + "</p></div><div class='card live' style='border-color:var(--accent)'><span class='eyebrow' style='color:var(--accent)'>З вашими правилами · " + f.filter(Boolean).length + " з " + f.length + "</span><p style='margin-top:6px'>" + o[1] + "</p></div>";
+        out.innerHTML = "<div class='card'><span class='eyebrow'>Без правил</span><p style='margin-top:6px'>" + o[0] + "</p></div><div class='card live' style='border-color:var(--accent)'><span class='eyebrow' style='color:var(--accent)'>З твоїми правилами · " + f.filter(Boolean).length + " з " + f.length + "</span><p style='margin-top:6px'>" + o[1] + "</p></div>";
         if (f.filter(Boolean).length >= 3) mark(null, "claude", true);
       }
       ta.oninput = function () { clearTimeout(tmr); tmr = setTimeout(upd, 180); };
       wrap4.appendChild(ta); wrap4.appendChild(cl); box.appendChild(wrap4); box.appendChild(out); upd();
-      box.appendChild(el("p", { class: "meta", text: "Агент застосовує правила без нагадувань, бо читає файл на початку кожної роботи. Там, де правил немає, він діє на власний розсуд." }));
-      box.appendChild(el("div", { class: "note" }, "<b>Правило для правил.</b> Якщо агент двічі помилився в одному й тому самому місці, у CLAUDE.md бракує рядка. Писати файл з нуля не обов'язково: команда <code>/init</code> (агент сам переглядає папку й складає чернетку правил) або прохання «склади CLAUDE.md з того, що ти бачиш у папці» дадуть першу версію, а ви допишете своє."));
+      box.appendChild(el("p", { class: "meta", text: "Агент застосовує правила без нагадувань, бо читає файл на початку кожної роботи. Там, де правил немає, він діє на власний розсуд. Як і всі ми." }));
+      box.appendChild(el("div", { class: "note" }, "<b>Правило для правил.</b> Якщо агент двічі помилився в одному й тому самому місці, у CLAUDE.md бракує рядка. Писати файл з нуля не обов'язково: команда <code>/init</code> (агент сам переглядає папку й складає чернетку правил) або прохання «склади CLAUDE.md з того, що ти бачиш у папці» дадуть першу версію, а ти допишеш своє."));
       var r = el("button", { class: "skip", text: "Пройти вправу з початку" }); r.onclick = function () { ts().lv = 0; save(); renderRules(); }; box.appendChild(r);
     }
   }
@@ -390,30 +399,48 @@
     var box = $("#skill-box"); box.innerHTML = "";
     box.appendChild(el("h3", { text: "Навичка /" + T.skill + ": рецепт, який запускається однією командою" }));
     if (phase === 0) {
-      box.appendChild(el("p", { class: "meta", text: "Розставте кроки рецепта в правильному порядку. Подумайте, що агентові потрібно знати, перш ніж писати." }));
-      var ol = el("ol", { class: "order" });
-      S.order.forEach(function (idx, pos) {
-        var li = el("li"); li.appendChild(el("span", { class: "n", text: pos + 1 })); li.appendChild(el("span", { text: T.steps[idx] }));
-        var mv = el("span", { class: "mv" });
-        var up = el("button", { "aria-label": "Вище", text: "↑" }), dn = el("button", { "aria-label": "Нижче", text: "↓" });
-        up.disabled = pos === 0; dn.disabled = pos === S.order.length - 1;
-        up.onclick = function () { var t = S.order[pos - 1]; S.order[pos - 1] = S.order[pos]; S.order[pos] = t; save(); renderSkill(); };
-        dn.onclick = function () { var t = S.order[pos + 1]; S.order[pos + 1] = S.order[pos]; S.order[pos] = t; save(); renderSkill(); };
-        mv.appendChild(up); mv.appendChild(dn); li.appendChild(mv); ol.appendChild(li);
-      });
-      box.appendChild(ol);
+      /* tap-to-build: tap the steps in the order the agent should do them */
+      var N = T.steps.length, placed = S.placed || 0, miss = S.miss || 0;
+      var PH = function (i) { return i < 2 ? ["Підготовка", "агент читає правила й матеріали"] : i === N - 1 ? ["Звіт тобі", "що вирішити людині"] : ["Робота", "перевіряє дані й пише"]; };
+      box.appendChild(el("p", { text: "Агентові, як і новому колезі, треба пояснити порядок дій. Натискай кроки в тому порядку, у якому їх варто робити. Почни з найпершого." }));
+      var wrap = el("div", { class: "rcp" });
+      var slots = el("ol", { class: "rcp-slots" }), lastPh = "";
+      for (var i = 0; i < N; i++) {
+        var ph = PH(i);
+        if (ph[0] !== lastPh) { slots.appendChild(el("li", { class: "rcp-ph" }, "<b>" + ph[0] + "</b> <span>" + ph[1] + "</span>")); lastPh = ph[0]; }
+        var sl = el("li", { class: "rcp-slot" + (i < placed ? " full" : i === placed ? " next" : "") });
+        sl.appendChild(el("span", { class: "n", text: i + 1 }));
+        sl.appendChild(el("span", { text: i < placed ? T.steps[i] : i === placed ? "Натисни крок, який іде " + (i === 0 ? "першим" : "далі") : "" }));
+        slots.appendChild(sl);
+      }
+      var pool = el("div", { class: "rcp-pool", role: "group", "aria-label": "Кроки рецепта" });
       var fb = el("p", { class: "fb", "aria-live": "polite" }); fb.hidden = true;
-      var b = el("button", { class: "btn primary", text: "Перевірити порядок" });
-      b.onclick = function () {
-        var ok = 0; Array.prototype.forEach.call(ol.children, function (li, i) { var good = S.order[i] === i; li.classList.toggle("ok", good); li.classList.toggle("no", !good); if (good) ok++; });
-        fb.hidden = false; fb.className = "fb " + (ok === 6 ? "good" : "bad");
-        fb.textContent = ok === 6 ? "Правильно: спершу структура й правила, потім перевірені дані, потім текст і список для людини." : "На місці " + ok + " з 6. Підказка: " + T.stepsHint + ".";
-        if (ok === 6) { b.textContent = "Зберегти навичку й запустити"; b.onclick = function () { S.skillPhase = 1; save(); renderSkill(); }; }
-      };
-      box.appendChild(fb); box.appendChild(el("div", { class: "row" })).appendChild(b);
+      S.order.forEach(function (idx) {
+        if (idx < placed) return;
+        var c = el("button", { class: "rcp-card", text: T.steps[idx] });
+        c.onclick = function () {
+          if (idx === placed) { S.placed = placed + 1; save(); renderSkill(); return; }
+          S.miss = ++miss; save();
+          c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake");
+          fb.hidden = false; fb.className = "fb bad";
+          fb.textContent = "Не зараз. Зараз черга фази «" + PH(placed)[0] + "»: " + PH(placed)[1] + "." + (miss >= 2 ? " Підказка: " + T.stepsHint + "." : "");
+        };
+        pool.appendChild(c);
+      });
+      wrap.appendChild(slots); if (placed < N) wrap.appendChild(pool);
+      box.appendChild(wrap); box.appendChild(fb);
+      var row = el("div", { class: "row" }); box.appendChild(row);
+      if (placed >= N) {
+        fb.hidden = false; fb.className = "fb good";
+        fb.textContent = "Рецепт готовий" + (miss ? "" : " з першої спроби. Підозріло добре") + ". Спершу підготовка, потім перевірені дані й текст, наприкінці список для людини.";
+        var b = el("button", { class: "btn primary", text: "Зберегти навичку й запустити" });
+        b.onclick = function () { S.skillPhase = 1; save(); renderSkill(); };
+        row.appendChild(b);
+      }
+      if (placed > 0) { var rs = el("button", { class: "skip", text: "Почати спочатку" }); rs.onclick = function () { S.placed = 0; S.miss = 0; save(); renderSkill(); }; row.appendChild(rs); }
       return;
     }
-    box.appendChild(el("p", { class: "meta", text: "Навичку збережено як текстовий файл .claude/skills/" + T.skill + "/SKILL.md у вашій папці. Запустіть її: наберіть у полі нижче назву навички зі скісною рискою, а після неї " + ({ pm: "звітний період", an: "тему записки", law: "назву акта" })[track] + "." }));
+    box.appendChild(el("p", { class: "meta", text: "Навичку збережено як текстовий файл .claude/skills/" + T.skill + "/SKILL.md у твоїй папці. Запусти її: набери в полі нижче назву навички зі скісною рискою, а після неї " + ({ pm: "звітний період", an: "тему записки", law: "назву акта" })[track] + "." }));
     var term = el("div", { class: "term", id: "skill-term", "aria-live": "polite" }); term.innerHTML = S.termHtml || "<span class='c'>Агент готовий. Папка: " + T.folder.replace("📁 ", "") + "</span>\n";
     box.appendChild(term);
     var row = el("form", { class: "row" }); row.style.flexWrap = "nowrap";
@@ -432,7 +459,7 @@
       if (S.skillPhase === 1 && re.test(v)) {
         typeLines(["Читаю правила CLAUDE.md… ✓", "Виконую крок 1… ✓", "Виконую крок 2… ✓", "Запускаю " + T.badScript + "…", "<span class='e'>Помилка: файл " + T.badScript + " не знайдено.</span>", "Зупиняюся. У навичці вказано файл, якого немає в папці."], function () {
           S.skillPhase = 2; save(); help.innerHTML = "";
-          help.appendChild(el("div", { class: "note warn" }, "<b>Так і задумано.</b> Навичка запускає скрипт, тобто невелику програму, яка перевіряє цифри. Ми навмисно вказали в навичці неправильну назву цього файлу. Агент сам каже, що не так. Розбиратися в коді не треба, достатньо попросити його виправити."));
+          help.appendChild(el("div", { class: "note warn" }, "<b>Так і задумано.</b> Навичка запускає скрипт, тобто невелику програму, яка перевіряє цифри. Ми навмисно вказали в навичці неправильну назву цього файлу. Буває й ненавмисно. Агент сам каже, що не так. Розбиратися в коді не треба, достатньо попросити його виправити."));
           var fix = el("button", { class: "btn", text: "Сказати агенту: «Виправ шлях до скрипта в навичці»" });
           fix.onclick = function () { inp.value = "Виправ шлях до скрипта в навичці"; if (row.requestSubmit) row.requestSubmit(); else row.onsubmit(new Event("submit")); };
           help.appendChild(fix);
@@ -447,7 +474,7 @@
       } else if (S.skillPhase >= 3 && re.test(v)) {
         typeLines(["Виконую навичку…", "<span class='ok'>Готово: " + T.runFile((v.split(/\s+/)[1] || T.arg).replace(/</g, "")) + "</span>"]);
       } else {
-        typeLines(["Не зрозумів, що зробити. " + (S.skillPhase === 2 ? "Спробуйте: «Виправ шлях до скрипта в навичці»." : "Щоб запустити навичку, наберіть /" + T.skill + " " + T.arg + ".")]);
+        typeLines(["Не зрозумів, що зробити. " + (S.skillPhase === 2 ? "Спробуй: «Виправ шлях до скрипта в навичці»." : "Щоб запустити навичку, набери /" + T.skill + " " + T.arg + ".")]);
       }
     };
     if (S.skillPhase === 3) help.appendChild(el("p", { class: "fb good", text: "Навичка працює. Наступного разу достатньо однієї команди: " + T.nextCmd + "." }));
@@ -492,7 +519,7 @@
       var ex = d.querySelector(".ex"); if (!ex) { ex = el("span", { class: "ex" }); d.appendChild(ex); }
       ex.textContent = (good ? "✓ " : "→ " + BINS[t[1]] + ". ") + t[2]; if (good) ok++;
     });
-    $("#sort-fb").textContent = "Збіглося " + ok + " з " + T.judge.length + ". " + (ok >= 6 ? "Ви добре бачите, що можна довірити агенту." : "Зверніть увагу на пояснення під картками.");
+    $("#sort-fb").textContent = "Збіглося " + ok + " з " + T.judge.length + ". " + (ok >= 6 ? "Ти добре бачиш, що можна довірити агенту." : "Глянь на пояснення під картками.");
     judgeProg.sort = true; judgeDone();
   };
   function judgeDone() { if (judgeProg.sort && judgeProg.draft) mark("judge", "judge"); }
@@ -517,7 +544,7 @@
   function renderTools() {
     var tt = $("#tools-tbl");
     var rows = TOOLS.filter(function (r) { return filt === "all" || (filt === "easy" && r[4] >= 4) || (filt === "local" && r[9].indexOf("local") >= 0) || (filt === "open" && r[9].indexOf("open") >= 0); });
-    tt.innerHTML = "<thead><tr><th>Інструмент</th><th>Де працює</th><th>Бачить файли на вашому комп'ютері</th><th>Для нетехнічних</th><th class='c'>AGENTS.md</th><th class='c'>SKILL.md</th><th class='c'>MCP</th><th>Вхідна ціна</th></tr></thead><tbody>" +
+    tt.innerHTML = "<thead><tr><th>Інструмент</th><th>Де працює</th><th>Бачить файли на твоєму комп'ютері</th><th><span class='tip' title='●●●●● працює як звичайний застосунок, ●○○○○ потрібні термінал і досвід розробника'>Для нетехнічних</span></th><th class='c'><span class='tip' title='Читає файл правил AGENTS.md, спільний для різних агентів'>AGENTS.md</span></th><th class='c'><span class='tip' title='Розуміє навички у форматі SKILL.md'>SKILL.md</span></th><th class='c'><span class='tip' title='Підключається до інших програм через стандарт MCP: пошта, календар, документи'>MCP</span></th><th>Вхідна ціна</th></tr></thead><tbody>" +
       rows.map(function (r) { return "<tr><td><b>" + (r[10] ? "<a href='" + r[10] + "' target='_blank' rel='noopener'>" + r[0] + " ↗</a>" : r[0]) + "</b><br><span class='meta'>" + r[1] + "</span></td><td>" + r[2] + "</td><td>" + r[3] + "</td><td class='score' aria-label='" + r[4] + " з 5'>" + "●".repeat(r[4]) + "<i>" + "●".repeat(5 - r[4]) + "</i></td><td class='c std-m'>" + r[5] + "</td><td class='c std-m'>" + r[6] + "</td><td class='c std-m'>" + r[7] + "</td><td>" + r[8] + "</td></tr>"; }).join("") + "</tbody>";
   }
   var tf = $("#tools-filter");
@@ -533,8 +560,8 @@
   function renderSteps() {
     var S = ts(); S.steps = S.steps || {};
     var all = [
-      ["Встановіть застосунок Claude і відкрийте вкладку Code", "<p>Завантажте застосунок з <a href='https://claude.com/download' target='_blank' rel='noopener'>claude.com/download</a> і увійдіть. Потрібна платна підписка Pro, Max, Team або Enterprise: на безкоштовному плані Claude Code недоступний. У бічній панелі оберіть вкладку <b>Code</b>. Термінал і програмування не потрібні.</p>", null, "<b>Інші інструменти</b> (кроки ті самі, лише файл правил називайте AGENTS.md):<span class='dl'><a href='https://chatgpt.com/download' target='_blank' rel='noopener'>ChatGPT з Codex ↗</a><a href='https://github.com/features/copilot/cli' target='_blank' rel='noopener'>GitHub Copilot CLI ↗</a><a href='https://antigravity.google' target='_blank' rel='noopener'>Google Antigravity ↗</a><a href='https://goose-docs.ai' target='_blank' rel='noopener'>Goose, відкритий код ↗</a></span>ChatGPT і Copilot мають безкоштовний план, Antigravity безкоштовний для приватних осіб, Goose безкоштовний, але потребує оплати моделі. Повний перелік з цінами на етапі 6."],
-      ["Створіть порожню папку й відкрийте її", "<p>Створіть на комп'ютері папку <span class='mono'>Навчальний_проєкт</span>. У застосунку натисніть <b>+ New</b> (нова сесія). Під полем вводу залиште <b>Local</b>, тобто роботу з файлами на вашому комп'ютері. Натисніть вибір папки, оберіть <b>Open folder…</b> і вкажіть цю папку. Агент бачитиме лише її.</p><p>Далі в кожному кроці натисніть «Скопіювати», вставте текст у поле вводу й надішліть. Коли агент питає дозволу, прочитайте запит і погодьте або відхиліть його.</p>", null]
+      ["Встанови застосунок Claude і відкрий вкладку Code", "<p>Завантаж застосунок з <a href='https://claude.com/download' target='_blank' rel='noopener'>claude.com/download</a> і ввійди. Потрібна платна підписка Pro, Max, Team або Enterprise: на безкоштовному плані Claude Code недоступний. У бічній панелі обери вкладку <b>Code</b>. Термінал і програмування не потрібні.</p>", null, "<b>Інші інструменти</b> (кроки ті самі, лише файл правил називай AGENTS.md):<span class='dl'><a href='https://chatgpt.com/download' target='_blank' rel='noopener'>ChatGPT з Codex ↗</a><a href='https://github.com/features/copilot/cli' target='_blank' rel='noopener'>GitHub Copilot CLI ↗</a><a href='https://antigravity.google' target='_blank' rel='noopener'>Google Antigravity ↗</a><a href='https://goose-docs.ai' target='_blank' rel='noopener'>Goose, відкритий код ↗</a></span>ChatGPT і Copilot мають безкоштовний план, Antigravity безкоштовний для приватних осіб, Goose безкоштовний, але потребує оплати моделі. Повний перелік з цінами на етапі 6."],
+      ["Створи порожню папку й відкрий її", "<p>Створи на комп'ютері папку <span class='mono'>Навчальний_проєкт</span>. У застосунку натисни <b>+ New</b> (нова сесія). Під полем вводу залиш <b>Local</b>, тобто роботу з файлами на твоєму комп'ютері. Натисни вибір папки, обери <b>Open folder…</b> і вкажи цю папку. Агент бачитиме лише її.</p><p>Далі в кожному кроці натисни «Скопіювати», встав текст у поле вводу й надішли. Коли агент питає дозволу, прочитай запит і погодь або відхили його.</p>", null]
     ].concat(T.bPrompts.map(function (p) { return [p[0], "<p>" + p[1] + "</p>", p[2]]; }));
     var stl = $("#steps"); stl.innerHTML = "";
     all.forEach(function (s, i) {
@@ -542,7 +569,7 @@
       var c = el("input", { type: "checkbox", id: "st-" + i, "aria-label": "Виконано: " + s[0] }); c.checked = !!S.steps[i];
       c.onchange = function () { S.steps[i] = c.checked; li.classList.toggle("done", c.checked); save(); prog(); if (Object.keys(S.steps).filter(function (k) { return S.steps[k]; }).length >= 3) mark(null, "plan"); };
       li.appendChild(c);
-      var body = el("div", { class: "body" }); body.appendChild(el("h3", { text: (i + 1) + ". " + s[0] })); body.appendChild(el("div", null, s[1]));
+      var body = el("div", { class: "body" }); var hh = el("h3"); hh.appendChild(el("label", { for: "st-" + i, text: (i + 1) + ". " + s[0] })); body.appendChild(hh); body.appendChild(el("div", null, s[1]));
       if (s[2]) { var p = el("div", { class: "prompt" }); p.appendChild(el("pre", { id: "pr-" + i, text: s[2] })); p.appendChild(el("button", { class: "btn small copy", "data-copy": "pr-" + i, text: "Скопіювати" })); body.appendChild(p); }
       if (s[3]) body.appendChild(el("p", { class: "alt" }, s[3]));
       li.appendChild(body); stl.appendChild(li);
@@ -561,11 +588,11 @@
       l.appendChild(inp); gen.appendChild(l);
     });
     function out() {
-      var v = {}; T.gen.forEach(function (g) { var x = ($("#g-" + track + "-" + g[0]).value || "").trim(); v[g[0]] = x || "[заповніть]"; });
+      var v = {}; T.gen.forEach(function (g) { var x = ($("#g-" + track + "-" + g[0]).value || "").trim(); v[g[0]] = x || "[заповни]"; });
       $("#out-claude").textContent = T.genClaude(v); $("#out-skill").textContent = T.genSkill(v);
     }
     $("#out-skill-path").textContent = ".claude/skills/" + T.skill + "/SKILL.md";
-    $("#gen-alt").innerHTML = "Працюєте в Claude Code? Цей абзац можна пропустити. Для Codex, Antigravity чи GitHub Copilot назвіть файл правил <code>AGENTS.md</code>. Claude Code теж його прочитає, якщо поруч немає CLAUDE.md. Навичку для Codex та Antigravity покладіть у <code>.agents/skills/" + T.skill + "/SKILL.md</code>.";
+    $("#gen-alt").innerHTML = "Працюєш у Claude Code? Цей абзац можна пропустити. Для Codex, Antigravity чи GitHub Copilot назви файл правил <code>AGENTS.md</code>. Claude Code теж його прочитає, якщо поруч немає CLAUDE.md. Навичку для Codex та Antigravity поклади в <code>.agents/skills/" + T.skill + "/SKILL.md</code>.";
     out();
     var p = $("#plan30"); p.innerHTML = "";
     for (var i = 0; i < 4; i++) p.appendChild(el("div", { class: "card" }, "<span class='w'>Тиждень " + (i + 1) + "</span><h3>" + T.plan[i * 2] + "</h3><p style='font-size:14.5px'>" + T.plan[i * 2 + 1] + "</p>"));
@@ -575,7 +602,7 @@
     var b = e.target.closest("[data-copy]"); if (!b) return;
     var src = document.getElementById(b.getAttribute("data-copy")); if (!src) return;
     var txt = src.textContent, old = b.textContent;
-    function selectIt() { var r = document.createRange(); r.selectNodeContents(src); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Виділено, натисніть Ctrl+C"; setTimeout(function () { b.textContent = old; }, 2500); }
+    function selectIt() { var r = document.createRange(); r.selectNodeContents(src); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Виділено, натисни Ctrl+C"; setTimeout(function () { b.textContent = old; }, 2500); }
     try { navigator.clipboard.writeText(txt).then(function () { b.textContent = "Скопійовано ✓"; setTimeout(function () { b.textContent = old; }, 1800); }, selectIt); } catch (err) { selectIt(); }
   });
 
@@ -594,10 +621,10 @@
   });
   function renderTest() {
     var answered = Object.keys(store.test).length, out = $("#test-out");
-    if (answered < TEST.length) { out.innerHTML = "<p class='meta'>Відповіли на " + answered + " з " + TEST.length + ".</p>"; return; }
+    if (answered < TEST.length) { out.innerHTML = "<p class='meta'>Відповідей: " + answered + " з " + TEST.length + ".</p>"; return; }
     var score = 0; TEST.forEach(function (q, i) { if (store.test[i] === 0) score += q[1]; });
     var lv = score <= 0 ? 0 : score <= 3 ? 1 : score <= 6 ? 2 : 3;
-    var rec = [["Чат", "Ваша задача не потребує файлів і повторення. Звичайна розмова з ШІ буде найшвидшою."], ["Проєкти", "У Claude чи ChatGPT створіть проєкт (розділ Projects) і покладіть туди постійні документи та інструкції. Тоді не доведеться пояснювати все щоразу."], ["Агент документів", "Дайте агентові папку з файлами. Він збере результат сам, а ви перевірите. Підійдуть Claude з режимом Cowork або ChatGPT Work."], ["Агент повної дії", "Задача повторюється, має багато файлів і потребує перевірок. Зробіть файл правил і навичку в Claude Code, Codex або Copilot."]][lv];
+    var rec = [["Чат", "Твоя задача не потребує файлів і повторення. Звичайна розмова з ШІ буде найшвидшою. Бригаду, щоб замінити лампочку, не викликають."], ["Проєкти", "У Claude чи ChatGPT створи проєкт (розділ Projects) і поклади туди постійні документи та інструкції. Тоді не доведеться пояснювати все щоразу."], ["Агент документів", "Дай агентові папку з файлами. Він збере результат сам, а ти перевіриш. Підійдуть Claude з режимом Cowork або ChatGPT Work."], ["Агент повної дії", "Задача повторюється, має багато файлів і потребує перевірок. Зроби файл правил і навичку в Claude Code, Codex або Copilot."]][lv];
     out.innerHTML = "<div class='result'><span class='eyebrow'>Рекомендація</span><h3 style='margin:4px 0 6px;font-size:22px'>Рівень " + (lv + 1) + ": " + rec[0] + "</h3><p>" + rec[1] + "</p><div class='mini-ladder'>" + [0, 1, 2, 3].map(function (i) { return "<span class='" + (i === lv ? "on" : "") + "' style='height:" + (22 + i * 14) + "px'></span>"; }).join("") + "</div></div>";
     mark("start");
   }
@@ -620,10 +647,10 @@
     ["CLAUDE.md", "правила проєкту", "Те, чого вчить цей курс, застосоване до нього самого: структура, як збирати й перевіряти, правила змісту й текстів, чого не робити. Агент читає цей файл на початку кожної сесії.", "основна сесія", ["Будь-хто може продовжити роботу без цієї розмови", "Посилання на сторінку й документ з аналізом"]],
     [".claude/skills/", "навички проєкту", "Три рецепти: /qa перевіряє всі модулі, /publish публікує за тим самим посиланням, /refresh-tools щокварталу оновлює карту інструментів.", "основна сесія", ["Кожна навичка є звичайним текстовим файлом SKILL.md", "Той самий принцип, що й /zvit у курсі"]],
     ["docs/", "журнал рішень і дослідження", "Журнал рішень з датами, правила текстів, схема файлу треку і стислі висновки досліджень: курси, методика, інструменти, юридична техніка, інтерфейс, робочий контекст.", "основна сесія за звітами субагентів", ["Знання з досліджень більше не живе лише в розмові", "Без реальних даних: лише узагальнені патерни"]],
-    ["vid-chatu-do-agenta.html", "готова сторінка", "Те, що ви зараз читаєте. Генерується автоматично, руками її ніхто не правив.", "build.py", ["Один файл: стилі, розмітка, дані й логіка разом", "Саме його опубліковано за посиланням"]],
+    ["vid-chatu-do-agenta.html", "готова сторінка", "Те, що ти зараз читаєш. Генерується автоматично, руками її ніхто не правив. Принаймні офіційно.", "build.py", ["Один файл: стилі, розмітка, дані й логіка разом", "Саме його опубліковано за посиланням"]],
     ["src/head.html", "стилі", "Кольори для світлої й темної теми, шрифти, анімації схем, адаптація під телефон.", "основна сесія + правки дизайн-рецензента", ["Кольори задані змінними, тож обидві теми беруть їх з одного місця", "Окремі правила вимикають анімації для тих, кому вони заважають"]],
     ["src/body.html", "розмітка", "Каркас семи етапів, усі схеми SVG, бонус. Тексти тут спільні для всіх треків.", "основна сесія + редактор спільних текстів", ["Схеми намальовані кодом, а не картинками, тому працюють у темній темі", "Вміст, що залежить від треку, двигун підставляє сам"]],
-    ["src/engine.js", "двигун", "Уся інтерактивність: симулятор чату й агента, лічильники, вправи з перевіркою, навичка з помилкою, прогрес, перемикання треків.", "основна сесія", ["Читає дані активного треку й будує з них екрани", "Прогрес зберігає лише у вашому браузері"]],
+    ["src/engine.js", "двигун", "Уся інтерактивність: симулятор чату й агента, лічильники, вправи з перевіркою, навичка з помилкою, прогрес, перемикання треків.", "основна сесія", ["Читає дані активного треку й будує з них екрани", "Прогрес зберігає лише у твоєму браузері"]],
     ["src/deck.js", "презентація", "Показує курс слайдами: вітальне вікно, прогрес, досягнення з конфеті, сертифікат, промпт для будь-якого ШІ і стіну анонімних пропозицій.", "основна сесія", ["Працює поверх двигуна й не знає, як влаштовані вправи", "Дизайн-система: токени shadcn/ui, шрифт Geist, криві анімацій Open Props"]],
     ["src/track_pm.js", "трек менеджерів", "Сценарій проміжного звіту: файли папки, пастки, кроки агента, вправи, запити для старту.", "автор-субагент → редактор → аудитор «новачок»", ["Понад 40 полів за спільною схемою", "Цифри узгоджені в усіх вправах"]],
     ["src/track_an.js", "трек аналітиків", "Сценарій аналітичної записки: вигрузка опитування з повторами, джерела, якість даних.", "автор-субагент → редактор → аудитор «новачок»", ["Та сама схема полів, інший зміст", "Ланцюжок розрахунку показано крок за кроком"]],
@@ -645,7 +672,7 @@
   renderSrc();
   if (store.bonus) openBonus(false);
   var _mark = mark;
-  mark = function (a, b, c) { _mark(a, b, c); if (!store.bonus && STAGES.every(function (s) { return store.done[s[0]]; }) && !$("#egg-toast")) { var t = el("div", { class: "egg-toast", id: "egg-toast" }, "<span>Ви пройшли всі етапи. Для вас відкрито бонус: як зроблено цей інструмент.</span>"); var bb = el("button", { class: "btn primary small", text: "Подивитися" }); bb.onclick = function () { openBonus(true); t.remove(); }; t.appendChild(bb); $("#start .stack").appendChild(t); } emit("app:mark", { stage: a, sys: b }); };
+  mark = function (a, b, c) { _mark(a, b, c); if (!store.bonus && STAGES.every(function (s) { return store.done[s[0]]; }) && !$("#egg-toast")) { var t = el("div", { class: "egg-toast", id: "egg-toast" }, "<span>Усі етапи пройдено. Для тебе відкрито бонус: як зроблено цей інструмент.</span>"); var bb = el("button", { class: "btn primary small", text: "Подивитися" }); bb.onclick = function () { openBonus(true); t.remove(); }; t.appendChild(bb); $("#start .stack").appendChild(t); } emit("app:mark", { stage: a, sys: b }); };
 
   /* ---------- first session: mockup + task anatomy ---------- */
   var TASKS = {
@@ -671,24 +698,24 @@
       "Спершу визнач останню редакцію за датою, перевір усі відсилки й звір таблицю з проєктом.",
       "Щодо кожного неопрацьованого зауваження ЦОВВ дай мені варіанти й зупинись. Файли чинних редакцій не змінюй."] }
   };
-  var PT_LBL = ["Мета: що й навіщо", "Матеріали: де лежать", "Результат: формат і куди", "Правила: як писати", "Перевірка: що звірити", "Стоп: де спитати вас"];
+  var PT_LBL = ["Мета: що й навіщо", "Матеріали: де лежать", "Результат: формат і куди", "Правила: як писати", "Перевірка: що звірити", "Стоп: де спитати тебе"];
   var mockI = 0, ptMode = "good";
   function sideHtml(hotCode) { return "<div class='app-side'><div class='tab'>Чат</div><div class='tab'>Cowork</div><div class='tab " + (hotCode ? "cur hot" : "cur") + "'>Code" + (hotCode ? "<span class='badge'>1</span>" : "") + "</div><div class='new'>+ New</div><div class='sess'>Сьогодні</div><div class='sess'>Навчальний_проєкт</div></div>"; }
   function barHtml(hotCh) { return "<div class='app-bar'><span class='dots'><i></i><i></i><i></i></span><span class='ttl'>Claude</span>" + (hotCh ? "<span class='tb hot'>Changes +12 −1<span class='badge'>7</span></span>" : "<span class='tb'>Changes</span>") + "</div>"; }
   function rowHtml(open) {
-    var folder = "<span class='ctl" + (open === "folder" ? " hot" : "") + "'>📁 " + (mockI >= 2 ? "Навчальний_проєкт" : "Оберіть папку") + " ▾" + (open === "folder" ? "<span class='badge'>2</span><div class='menu'><div class='cur'>Open folder…<small>обрати папку на комп'ютері</small></div><div>Навчальний_проєкт<small>нещодавні</small></div></div>" : "") + "</span>";
+    var folder = "<span class='ctl" + (open === "folder" ? " hot" : "") + "'>📁 " + (mockI >= 2 ? "Навчальний_проєкт" : "Обери папку") + " ▾" + (open === "folder" ? "<span class='badge'>2</span><div class='menu'><div class='cur'>Open folder…<small>обрати папку на комп'ютері</small></div><div>Навчальний_проєкт<small>нещодавні</small></div></div>" : "") + "</span>";
     var modeLbl = (mockI >= 2 && mockI <= 4) ? "Plan" : "Manual"; var perm = "<span class='ctl" + (open === "perm" ? " hot" : "") + "'>" + modeLbl + " ▾" + (open === "perm" ? "<span class='badge'>3</span><div class='menu'><div>Manual<small>питає перед кожною зміною файлу чи командою</small></div><div>Accept edits<small>сам змінює файли в папці</small></div><div class='cur'>Plan<small>спершу вивчає матеріали й пропонує план, нічого не змінює</small></div><div>Auto<small>діє сам, ризиковані дії блокуються</small></div></div>" : "") + "</span>";
     return "<div class='prow'><span class='ctl'>💻 Local ▾</span>" + folder + perm + "<span class='sp'></span><span class='ctl'>Модель ▾</span></div>";
   }
   function goodPrompt() { return TASKS[track].parts.join(" "); }
   var MOCK = [
-    ["Відкрийте вкладку Code", "У бічній панелі застосунку Claude оберіть <b>Code</b>. Якщо вкладки показано іконками, наведіть на них курсор, щоб побачити назви. Кожна окрема розмова з агентом тут називається сесією. Нову відкриває кнопка <b>+ New</b> (нова сесія).", function () { return barHtml() + "<div class='app-body'>" + sideHtml(true) + "<div class='app-main'><p class='hello'>Над чим працюємо?</p><div class='pbox'><div class='ph'>Опишіть задачу…</div>" + rowHtml() + "</div></div></div>"; }],
-    ["Оберіть папку проєкту", "Під полем вводу залиште <b>Local</b>: агент працюватиме з файлами на вашому комп'ютері. Натисніть вибір папки, у меню оберіть <b>Open folder…</b> і вкажіть папку. Агент бачитиме лише її. Тому почніть з копій файлів і не відкривайте домашню папку чи всі документи одразу.", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><p class='hello'>Над чим працюємо?</p><div class='pbox'><div class='ph'>Опишіть задачу…</div>" + rowHtml("folder") + "</div></div></div>"; }],
-    ["Для великої задачі оберіть Plan", "Задача на кілька документів? Спершу оберіть режим <b>Plan</b>. У ньому агент лише вивчає матеріали й пропонує план, нічого не змінюючи. Для маленької правки підійде <b>Manual</b>: агент питатиме перед кожною зміною.", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><p class='hello'>Над чим працюємо?</p><div class='pbox'><div class='ph'>Опишіть задачу…</div>" + rowHtml("perm") + "</div></div></div>"; }],
-    ["Опишіть задачу", "Напишіть задачу звичайними словами, як колезі. Що має бути в доброму описі, показано нижче, у блоці «Як описати задачу агенту».", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><div class='pbox hot' style='position:relative'><span class='badge'>4</span><div class='ph typed'>" + goodPrompt() + "</div>" + rowHtml() + "</div></div></div>"; }],
-    ["Перевірте й виправте план", "<b>Від цього кроку залежить результат.</b> План показує, як агент зрозумів задачу, ще до того, як він щось змінив. Перевірте, чи взято всі файли, чи враховано пастки й порядок дій. Виправте словами, наприклад «спершу визнач останню редакцію». Виправити план займає хвилину, переробити п'ятнадцять файлів займає годину. Коли план правильний, погодьте його.", function () { var st = T.steps.slice(0, 5).map(function (x) { return "<li>" + x + "</li>"; }).join(""); return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><div class='amsg u'>" + goodPrompt().slice(0, 90) + "…</div><div class='amsg plan hot' style='position:relative'><span class='badge'>5</span><b>План (поки нічого не змінено):</b><ol>" + st + "</ol><div class='pb'><span class='y'>✓ Погодити план</span><span>✎ Виправити</span></div></div><div class='pbox'><div class='ph typed'>Добре, але спершу перевір, чи немає новішої редакції, і лише потім пиши текст.</div>" + rowHtml() + "</div></div></div>"; }],
-    ["Погоджуйте зміни", "Після погодження плану агент береться до роботи й питає дозволу перед кожним записом файлу. Прочитайте зміну й погодьте або відхиліть її. Відхиляєте? Одразу напишіть, як треба, і агент врахує. Точні підписи кнопок у вашій версії можуть відрізнятися.", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><div class='amsg'>План погоджено. Виконую крок 1 з 5.</div><div class='perm hot'><span class='badge'>6</span><b>Агент хоче створити файл " + TASKS[track].out + "</b><div class='diff'><span class='add'>+ 48 нових рядків</span></div><div class='pb'><span class='y'>✓ Погодити</span><span>✕ Відхилити</span></div></div></div></div>"; }],
-    ["Перегляньте зміни", "Кнопка <b>Changes</b> угорі показує всі зміни у файлах. Натисніть потрібний рядок у файлі, лишіть коментар, і агент переробить саме це місце.", function () { return barHtml(true) + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><div class='amsg'>Готово: " + TASKS[track].out + ". Три місця потребують вашого рішення, список нижче.</div><div class='pbox'><div class='ph'>Відповісти агенту…</div>" + rowHtml() + "</div></div></div>"; }]
+    ["Відкрий вкладку Code", "У бічній панелі застосунку Claude обери <b>Code</b>. Якщо вкладки показано іконками, наведи на них курсор, щоб побачити назви. Кожна окрема розмова з агентом тут називається сесією. Нову відкриває кнопка <b>+ New</b> (нова сесія).", function () { return barHtml() + "<div class='app-body'>" + sideHtml(true) + "<div class='app-main'><p class='hello'>Над чим працюємо?</p><div class='pbox'><div class='ph'>Опиши задачу…</div>" + rowHtml() + "</div></div></div>"; }],
+    ["Обери папку проєкту", "Під полем вводу залиш <b>Local</b>: агент працюватиме з файлами на твоєму комп'ютері. Натисни вибір папки, у меню обери <b>Open folder…</b> і вкажи папку. Агент бачитиме лише її. Тому почни з копій файлів і не відкривай домашню папку чи всі документи одразу.", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><p class='hello'>Над чим працюємо?</p><div class='pbox'><div class='ph'>Опиши задачу…</div>" + rowHtml("folder") + "</div></div></div>"; }],
+    ["Для великої задачі обери Plan", "Задача на кілька документів? Спершу обери режим <b>Plan</b>. У ньому агент лише вивчає матеріали й пропонує план, нічого не змінюючи. Для маленької правки підійде <b>Manual</b>: агент питатиме перед кожною зміною.", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><p class='hello'>Над чим працюємо?</p><div class='pbox'><div class='ph'>Опиши задачу…</div>" + rowHtml("perm") + "</div></div></div>"; }],
+    ["Опиши задачу", "Напиши задачу звичайними словами, як колезі, який уперше чує про проєкт. Що має бути в доброму описі, показано нижче, у блоці «Як описати задачу агенту».", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><div class='pbox hot' style='position:relative'><span class='badge'>4</span><div class='ph typed'>" + goodPrompt() + "</div>" + rowHtml() + "</div></div></div>"; }],
+    ["Перевір і виправ план", "<b>Від цього кроку залежить результат.</b> План показує, як агент зрозумів задачу, ще до того, як він щось змінив. Перевір, чи взято всі файли, чи враховано пастки й порядок дій. Виправ словами, наприклад «спершу визнач останню редакцію». Виправити план займає хвилину, переробити п'ятнадцять файлів займає годину. Коли план правильний, погодь його.", function () { var st = T.steps.slice(0, 5).map(function (x) { return "<li>" + x + "</li>"; }).join(""); return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><div class='amsg u'>" + goodPrompt().slice(0, 90) + "…</div><div class='amsg plan hot' style='position:relative'><span class='badge'>5</span><b>План (поки нічого не змінено):</b><ol>" + st + "</ol><div class='pb'><span class='y'>✓ Погодити план</span><span>✎ Виправити</span></div></div><div class='pbox'><div class='ph typed'>Добре, але спершу перевір, чи немає новішої редакції, і лише потім пиши текст.</div>" + rowHtml() + "</div></div></div>"; }],
+    ["Погоджуй зміни", "Після погодження плану агент береться до роботи й питає дозволу перед кожним записом файлу. Прочитай зміну й погодь або відхили її. Відхиляєш? Одразу напиши, як треба, і агент врахує. Точні підписи кнопок у твоїй версії можуть відрізнятися.", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><div class='amsg'>План погоджено. Виконую крок 1 з 5.</div><div class='perm hot'><span class='badge'>6</span><b>Агент хоче створити файл " + TASKS[track].out + "</b><div class='diff'><span class='add'>+ 48 нових рядків</span></div><div class='pb'><span class='y'>✓ Погодити</span><span>✕ Відхилити</span></div></div></div></div>"; }],
+    ["Переглянь зміни", "Кнопка <b>Changes</b> угорі показує всі зміни у файлах. Натисни потрібний рядок у файлі, лиши коментар, і агент переробить саме це місце.", function () { return barHtml(true) + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><div class='amsg'>Готово: " + TASKS[track].out + ". Три місця потребують твого рішення, список нижче.</div><div class='pbox'><div class='ph'>Відповісти агенту…</div>" + rowHtml() + "</div></div></div>"; }]
   ];
   function renderMock() {
     var M = MOCK[mockI];
@@ -697,8 +724,10 @@
     $("#mock-step-lbl").textContent = (mockI + 1) + "/" + MOCK.length + " · " + M[0];
     $("#mock-prev").disabled = mockI === 0;
     $("#mock-next").textContent = mockI === MOCK.length - 1 ? "Спочатку ↺" : "Далі →";
-    var d = $("#mock-dots"); d.innerHTML = ""; MOCK.forEach(function (x, i) { d.appendChild(el("i", { class: i === mockI ? "on" : "" })); });
+    var d = $("#mock-dots"); d.innerHTML = ""; MOCK.forEach(function (x, i) { var dot = el("button", { class: i === mockI ? "on" : "", "aria-label": "Крок " + (i + 1) }); dot.onclick = function () { mockI = i; renderMock(); }; d.appendChild(dot); });
+    if ($("#mock .hot")) $("#mock-cap").innerHTML += " <span class='mock-tap'>Натисни підсвічене місце.</span>";
   }
+  $("#mock").addEventListener("click", function (e) { if (e.target.closest(".hot")) $("#mock-next").click(); });
   $("#mock-prev").onclick = function () { if (mockI > 0) { mockI--; renderMock(); } };
   $("#mock-next").onclick = function () { mockI = mockI === MOCK.length - 1 ? 0 : mockI + 1; renderMock(); };
   var ptg = $("#pt-toggle");
@@ -707,10 +736,11 @@
     b.onclick = function () { ptMode = o[0]; Array.prototype.forEach.call(ptg.children, function (c) { c.setAttribute("aria-pressed", c === b ? "true" : "false"); }); renderPT(); };
     ptg.appendChild(b);
   });
+  var ptPin = -1;
   function renderPT() {
     var P = TASKS[track], lg = $("#pt-legend"), tx = $("#pt-text");
-    lg.innerHTML = ""; PT_LBL.forEach(function (l, i) { var s = el("span", { class: "c" + i, text: l, tabindex: "0" }); var on = function () { tx.classList.add("dim"); tx.querySelectorAll(".seg").forEach(function (g) { g.classList.toggle("on", g.getAttribute("data-i") === String(i)); }); }; var off = function () { tx.classList.remove("dim"); }; s.addEventListener("mouseenter", on); s.addEventListener("focus", on); s.addEventListener("mouseleave", off); s.addEventListener("blur", off); lg.appendChild(s); });
-    if (ptMode === "bad") tx.innerHTML = "«" + P.bad + "»<span class='miss'>Тут немає жодної з шести частин. Агент вгадуватиме, які файли брати, у якому форматі писати й що перевіряти. І нічого не спитає, бо не знає, де зупинитися.</span>";
+    lg.innerHTML = ""; PT_LBL.forEach(function (l, i) { var s = el("span", { class: "c" + i, text: l, tabindex: "0" }); var on = function () { var m = tx.querySelector(".miss"); if (m) { m.classList.add("hl"); return; } tx.classList.add("dim"); tx.querySelectorAll(".seg").forEach(function (g) { g.classList.toggle("on", g.getAttribute("data-i") === String(i)); }); }; var off = function () { if (ptPin === i) return; var m = tx.querySelector(".miss"); if (m) m.classList.remove("hl"); tx.classList.remove("dim"); }; s.setAttribute("role", "button"); if (ptPin === i) { s.classList.add("pin"); setTimeout(on, 0); } s.onclick = function () { ptPin = ptPin === i ? -1 : i; renderPT(); }; s.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); s.click(); } }); s.addEventListener("mouseenter", on); s.addEventListener("focus", on); s.addEventListener("mouseleave", off); s.addEventListener("blur", off); lg.appendChild(s); });
+    if (ptMode === "bad") tx.innerHTML = "«" + P.bad + "»<span class='miss'>Тут немає жодної з шести частин. Агент вгадуватиме, які файли брати, у якому форматі писати й що перевіряти. І нічого не спитає, бо не знає, де зупинитися. Зате дуже старанно.</span>";
     else tx.innerHTML = P.parts.map(function (p, i) { return "<span class='seg c" + i + "' data-i='" + i + "'>" + p + "</span>"; }).join(" ");
     var g = $("#pt-gen"); g.innerHTML = "";
     PT_LBL.forEach(function (l, i) { var lab = el("label", { class: "full" }); lab.appendChild(el("span", { text: l })); var ta = el("textarea", { id: "pt-" + i }); ta.value = P.parts[i]; ta.oninput = ptOut; lab.appendChild(ta); g.appendChild(lab); });
@@ -724,16 +754,16 @@
     var cl = T.files["CLAUDE.md"][1].replace(/<[^>]+>/g, "").split("\n").filter(function (l) { return l.trim(); }).slice(0, 5).join("\n");
     var sk = T.files[Object.keys(T.files)[1]][1].replace(/<[^>]+>/g, "").split("\n").filter(function (l) { return /^\d\./.test(l); }).slice(0, 3).join("\n");
     return [
-      { t: "0. Відкрили папку", say: "Нічого не пишете. Просто відкриваєте Claude Code і обираєте папку з документами.", files: [], can: ["Читає й пише файли в цій папці", "Виконує кроки й перевіряє себе", "<i>Нічого не знає про ваш проєкт, донора чи правила</i>"] },
-      { t: "1. Пояснили правила", say: "«Запиши в CLAUDE.md правила цього проєкту: хто донор, як оформлюємо цифри, звідки беремо джерела, чого не робити.»", files: [["CLAUDE.md", "правила проєкту", cl + "\n…"]], can: ["Усе з кроку 0", "<b>Щоразу сам читає ваші правила</b>", "Не треба пояснювати проєкт заново в кожній розмові"] },
-      { t: "2. Зберегли рецепт", say: "«Перетвори те, що ми щойно зробили, на навичку /" + T.skill + ".»", files: [["CLAUDE.md", "правила проєкту", ""], [".claude/skills/" + T.skill + "/SKILL.md", "рецепт задачі", sk + "\n…"]], can: ["Усе з кроків 0 і 1", "<b>Нова команда: /" + T.skill + "</b>", "Робить вашу задачу за записаним рецептом однією командою"] }
+      { t: "0. Відкрили папку", say: "Нічого не пишеш. Просто відкриваєш Claude Code і обираєш папку з документами.", files: [], can: ["Читає й пише файли в цій папці", "Виконує кроки й перевіряє себе", "<i>Нічого не знає про твій проєкт, донора чи правила. Як новенький у перший день</i>"] },
+      { t: "1. Пояснили правила", say: "«Запиши в CLAUDE.md правила цього проєкту: хто донор, як оформлюємо цифри, звідки беремо джерела, чого не робити.»", files: [["CLAUDE.md", "правила проєкту", cl + "\n…"]], can: ["Усе з кроку 0", "<b>Щоразу сам читає твої правила</b>", "Не треба пояснювати проєкт заново в кожній розмові"] },
+      { t: "2. Зберегли рецепт", say: "«Перетвори те, що ми щойно зробили, на навичку /" + T.skill + ".»", files: [["CLAUDE.md", "правила проєкту", ""], [".claude/skills/" + T.skill + "/SKILL.md", "рецепт задачі", sk + "\n…"]], can: ["Усе з кроків 0 і 1", "<b>Нова команда: /" + T.skill + "</b>", "Робить твою задачу за записаним рецептом однією командою"] }
     ];
   }
   function renderBirth() {
     var D = birthData(), S = D[birthI], tabs = $("#birth-tabs"); if (!tabs) return;
     tabs.innerHTML = ""; D.forEach(function (d, i) { var b = el("button", { class: "chip", role: "tab", "aria-selected": i === birthI ? "true" : "false", "aria-pressed": i === birthI ? "true" : "false", text: d.t }); b.onclick = function () { birthI = i; renderBirth(); }; tabs.appendChild(b); });
     $("#birth-say").innerHTML = "<p>" + S.say + "</p>";
-    var tr = "<div class='dim'>📁 ваша папка/</div><div class='dim'>&nbsp;&nbsp;📄 ваші документи…</div>";
+    var tr = "<div class='dim'>📁 твоя папка/</div><div class='dim'>&nbsp;&nbsp;📄 твої документи…</div>";
     S.files.forEach(function (f, i) { var isNew = (birthI === 1 && i === 0) || (birthI === 2 && i === 1); tr += "<div class='bf" + (isNew ? " new" : "") + "'>&nbsp;&nbsp;📄 <b class='mono'>" + f[0] + "</b> <span class='meta'>" + f[1] + (isNew ? ", новий" : "") + "</span>" + (f[2] && isNew ? "<pre class='file'>" + f[2] + "</pre>" : "") + "</div>"; });
     if (!S.files.length) tr += "<p class='meta'>Жодного файлу агента ще немає.</p>";
     $("#birth-tree").innerHTML = tr;
@@ -806,7 +836,7 @@
       if (a.x === b2.x) { x1 = a.x + nw; x2 = b2.x + nw; d = "M" + x1 + " " + y1 + " C " + (x1 + 22) + " " + y1 + ", " + (x2 + 22) + " " + y2 + ", " + (x2 + 2) + " " + y2; }
       else if (a.x < b2.x) { x1 = a.x + nw; x2 = b2.x; d = "M" + x1 + " " + y1 + " C " + (x1 + 30) + " " + y1 + ", " + (x2 - 30) + " " + y2 + ", " + (x2 - 2) + " " + y2; }
       else { x1 = a.x; x2 = b2.x + nw; d = "M" + x1 + " " + y1 + " C " + (x1 - 30) + " " + y1 + ", " + (x2 + 30) + " " + y2 + ", " + (x2 + 2) + " " + y2; }
-      s += "<path d='" + d + "' fill='none' style='stroke:" + col + ";opacity:" + (on ? 0.95 : 0.13) + "' stroke-width='" + (on ? 2 : 1.2) + "'" + (on ? " marker-end='url(#dm-" + e[2] + ")' class='dep-on'" : "") + "/>";
+      s += "<path data-t='" + e[2] + "' d='" + d + "' fill='none' style='stroke:" + col + ";opacity:" + (on ? 0.95 : 0.13) + "' stroke-width='" + (on ? 2 : 1.2) + "'" + (on ? " marker-end='url(#dm-" + e[2] + ")' class='dep-on'" : "") + "/>";
     });
     DEP_N.forEach(function (n) {
       var p = pos[n[0]], cur = n[0] === depSel, r = rel[n[0]];
@@ -819,7 +849,7 @@
     var li = function (arr, k) { return arr.length ? "<ul>" + arr.map(function (e) { return "<li><span class='dep-dot' style='background:" + DEP_T[e[2]][1] + "'></span>" + lbl(e[k]) + " <span class='meta'>(" + DEP_T[e[2]][0] + ")</span></li>"; }).join("") + "</ul>" : "<p class='meta'>немає</p>"; };
     $("#dep-info").innerHTML = "<div class='dh'><span class='eyebrow'>" + DEP_COLS[N[1]] + "</span><h3 class='mono' style='font-size:15px;margin:4px 0'>" + N[2] + "</h3><p>" + N[3] + "</p></div><div><b>Від чого залежить</b>" + li(ins, 0) + "</div><div><b>На що впливає</b>" + li(outs, 1) + "</div>";
   }
-  var dl = $("#dep-legend"); if (dl) Object.keys(DEP_T).forEach(function (k) { dl.appendChild(el("span", { class: "chip", style: "cursor:default;border-color:" + DEP_T[k][1] }, "<span class='dep-dot' style='background:" + DEP_T[k][1] + "'></span>" + DEP_T[k][0])); });
+  var dl = $("#dep-legend"); if (dl) Object.keys(DEP_T).forEach(function (k) { var b = el("button", { class: "chip", "aria-pressed": "true", style: "border-color:" + DEP_T[k][1], title: "Показати або сховати цей тип зв'язків" }, "<span class='dep-dot' style='background:" + DEP_T[k][1] + "'></span>" + DEP_T[k][0]); b.onclick = function () { var off = $("#dep-svg").classList.toggle("off-" + k); b.setAttribute("aria-pressed", off ? "false" : "true"); }; dl.appendChild(b); });
   renderDep();
   function renderAll() { renderRail(); renderLadder(); resetSim(); pi = 0; renderPredict(); current = null; renderTree(); renderRules(); renderSkill(); renderJudge(); renderSteps(); renderGen(); renderMock(); renderPT(); birthI = 0; renderBirth(); }
   renderAll();

@@ -613,8 +613,8 @@ body.deck .slide-on.sub-n .stage-head > p, body.deck .slide-on.sub-n .stage-head
 body.deck .slide-on.sub-n .stage-head h2 { font-size: clamp(20px, 2.4vw, 24px); color: var(--muted); }
 .slide-in > .wrap { animation: slide-in .55s var(--ease-out-5) both; }
 .slide-in.back > .wrap { animation-name: slide-back; }
-@keyframes slide-in { from { opacity: 0; transform: translateX(28px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
-@keyframes slide-back { from { opacity: 0; transform: translateX(-28px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes slide-in { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+@keyframes slide-back { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
 .deckbar { display: none; }
 body.deck .deckbar { display: flex; position: fixed; z-index: 30; left: 50%; bottom: max(16px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); width: min(720px, calc(100% - 32px)); align-items: center; gap: 8px; padding: 8px; border-radius: 999px; border: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 82%, transparent); backdrop-filter: blur(14px) saturate(1.4); -webkit-backdrop-filter: blur(14px) saturate(1.4); box-shadow: var(--shadow-lg); }
 .db-btn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; height: 44px; min-width: 44px; padding: 0 16px; font-weight: 500; font-size: 14.5px; transition: transform .2s var(--ease-3), opacity .2s; }
@@ -704,4 +704,98 @@ body.deck .deckbar { display: flex; position: fixed; z-index: 30; left: 50%; bot
 .wall-item { padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--sunk); font-size: 14.5px; animation: fade-up .6s var(--ease-out-5) both; overflow-wrap: anywhere; }
 .wall-item .w-d { display: block; margin-top: 8px; font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
 .wall-empty { color: var(--muted); font-size: 14px; grid-column: 1 / -1; }
+
+/* ===== affordance: everything clickable looks clickable ===== */
+button.step, button.track { position: relative; cursor: pointer; transition: transform .25s var(--ease-3), box-shadow .25s var(--ease-3), border-color .2s, background .2s; }
+button.step:hover, button.track:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: color-mix(in srgb, var(--ink) 35%, var(--line)); }
+button.step:active, button.track:active { transform: translateY(-1px); }
+button.step::after, button.track::after { content: "+"; position: absolute; top: 12px; right: 12px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font: 500 16px/1 var(--font-body); color: var(--muted); border: 1px solid var(--line); background: var(--surface); transition: transform .25s var(--ease-3), background .2s, color .2s; }
+button.step:hover::after, button.track:hover::after { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); transform: rotate(90deg); }
+button.step[aria-pressed="true"]::after, button.track[aria-pressed="true"]::after { content: "✓"; font-size: 12px; background: var(--accent); border-color: var(--accent); color: var(--surface); transform: none; }
+button.step[aria-pressed="true"] { background: var(--accent-soft); }
+button.step[aria-pressed="true"]::before { content: ""; position: absolute; left: 50%; bottom: -9px; width: 14px; height: 14px; background: var(--accent-soft); border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: translateX(-50%) rotate(45deg); }
+button.step:not([aria-pressed="true"])::after { animation: tap-hint 2.8s var(--ease-in-out-3) 1.2s 3; }
+@keyframes tap-hint { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent); } 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 22%, transparent); } }
+#ladder-steps { position: relative; margin-top: 34px; }
+#ladder-steps::before { content: "Натисни на сходинку, і її розбір відкриється нижче ↓"; position: absolute; top: -30px; left: 0; font-size: 13.5px; font-weight: 500; color: var(--ink); }
+.tree button, .src-tree button { cursor: pointer; transition: background .15s, border-color .15s, padding-left .2s var(--ease-3); }
+.tree button:hover:not([aria-pressed="true"]) { background: var(--sunk); border-color: var(--line); padding-left: 12px; }
+.tree button:not([aria-pressed="true"])::after { content: " →"; opacity: 0; transition: opacity .15s; }
+.tree button:hover::after { opacity: .6; }
+@media (prefers-reduced-motion: reduce) { button.step::after { animation: none !important; } button.step:hover, button.track:hover { transform: none; } }
+@media (hover: none) { button.step::after, button.track::after { width: 28px; height: 28px; } }
+
+/* interactive architecture diagram */
+#arch [data-g] { cursor: pointer; transition: opacity .25s var(--ease-3); outline: none; }
+#arch [data-g] .box, #arch [data-g] .ring { transition: stroke .2s, stroke-width .2s, filter .25s; }
+#arch [data-g]:hover .box, #arch [data-g]:hover .ring, #arch [data-g]:focus-visible .box, #arch [data-g]:focus-visible .ring { stroke: var(--ink); stroke-width: 2.5; }
+#arch [data-g].hl .box, #arch [data-g].hl .ring { filter: drop-shadow(0 6px 14px rgb(0 0 0 / .12)); }
+.arch-info { display: grid; gap: 4px; margin-top: 10px; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--sunk); font-size: 14.5px; min-height: 64px; animation: fade-up .35s var(--ease-out-5) both; }
+.arch-info b { font-size: 15px; letter-spacing: -0.01em; }
+.arch-info.idle { background: transparent; border-style: dashed; color: var(--muted); }
+.arch-info .ai-k { font-family: var(--font-mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink); }
+.formula .part { cursor: pointer; transition: transform .25s var(--ease-3), box-shadow .25s, border-color .2s; }
+.formula .part:hover, .formula .part.on { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+
+/* recipe builder: tap steps in order */
+.rcp { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.rcp-slots { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.rcp-ph { font-size: 12.5px; color: var(--muted); margin-top: 6px; } .rcp-ph b { color: var(--ink); font-family: var(--font-mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; margin-right: 6px; }
+.rcp-slot { display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: center; min-height: 44px; padding: 8px 12px; border-radius: 10px; border: 1.5px dashed var(--line); font-size: 14.5px; color: var(--muted); }
+.rcp-slot .n { font-family: var(--font-mono); font-size: 12.5px; }
+.rcp-slot.full { border-style: solid; border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); background: var(--accent-soft); color: var(--ink); animation: fade-up .4s var(--ease-out-5) both; }
+.rcp-slot.next { border-color: var(--ink); color: var(--ink); font-size: 13.5px; }
+.rcp-slot.next .n { animation: blink 1.6s ease-in-out infinite; }
+.rcp-pool { display: grid; gap: 8px; }
+.rcp-card { text-align: left; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow-sm); font-size: 14.5px; line-height: 1.4; cursor: pointer; transition: transform .2s var(--ease-3), box-shadow .2s, border-color .2s; }
+.rcp-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--ink); }
+.rcp-card.shake { animation: shake .45s var(--ease-in-out-3); border-color: var(--bad); }
+@keyframes shake { 20% { transform: translateX(-6px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(2px); } }
+@media (max-width: 760px) { .rcp { grid-template-columns: 1fr; } .rcp-pool { order: -1; } }
+@media (prefers-reduced-motion: reduce) { .rcp-card.shake, .rcp-slot.full, .rcp-slot.next .n { animation: none; } }
+
+/* ===== affordance pass 2 (UX audit) ===== */
+button.chip { cursor: pointer; transition: background .15s, border-color .15s, transform .15s var(--ease-3); }
+button.chip:hover:not([aria-pressed="true"]) { background: var(--sunk); border-color: color-mix(in srgb, var(--ink) 35%, var(--line)); }
+button.chip:active { transform: translateY(1px); }
+/* every explainer diagram */
+.isvg [data-g] { cursor: pointer; transition: opacity .25s var(--ease-3); outline: none; }
+.isvg.has-hl [data-g]:not(.hl) { opacity: .35; }
+.isvg [data-g]:hover rect, .isvg [data-g]:hover circle, .isvg [data-g]:focus-visible rect, .isvg [data-g]:focus-visible circle { stroke: var(--ink); stroke-width: 2.5; }
+.isvg [data-g].hl rect, .isvg [data-g].hl circle { stroke: var(--accent); stroke-width: 2.5; }
+.isvg [data-g].hl .box, .isvg [data-g].hl .ring { filter: drop-shadow(0 6px 14px rgb(0 0 0 / .12)); }
+/* mock app */
+#mock .hot { cursor: pointer; }
+.mock-tap { font-weight: 600; color: var(--ink); }
+.mock-dots button { width: 10px; height: 10px; padding: 0; border: 0; border-radius: 50%; background: var(--line); cursor: pointer; transition: transform .15s, background .15s; }
+.mock-dots button:hover { transform: scale(1.4); background: var(--muted); }
+.mock-dots button.on { background: var(--accent); }
+/* task anatomy legend */
+.pt-legend span[role="button"] { cursor: pointer; transition: transform .15s var(--ease-3), box-shadow .15s; }
+.pt-legend span[role="button"]:hover, .pt-legend span.pin { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.pt-legend span.pin { outline: 2px solid currentColor; outline-offset: 1px; }
+.pt-text .miss.hl { background: var(--bad-soft); border-radius: 8px; padding: 8px 10px; animation: fade-up .3s var(--ease-out-5) both; }
+/* rule levels: finished ones are buttons */
+.levels button { font: inherit; font-size: 13px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--accent); color: var(--accent); background: transparent; cursor: pointer; }
+.levels button:hover { background: var(--accent-soft); }
+/* first-session steps: the title ticks the box */
+.steps-l h3 label { cursor: pointer; }
+.steps-l > li { transition: border-color .15s; }
+.steps-l > li:hover { border-color: color-mix(in srgb, var(--ink) 25%, var(--line)); }
+/* tools table */
+#tools-tbl tbody tr { transition: background .12s; }
+#tools-tbl tbody tr:hover { background: var(--sunk); }
+#tools-tbl th .tip { cursor: help; }
+/* dependency map legend toggles */
+#dep-legend .chip[aria-pressed="false"] { opacity: .45; text-decoration: line-through; }
+#dep-svg.off-rule [data-t="rule"], #dep-svg.off-data [data-t="data"], #dep-svg.off-build [data-t="build"], #dep-svg.off-test [data-t="test"], #dep-svg.off-pub [data-t="pub"] { display: none; }
+/* context bar */
+.ctx-bar span[role="button"] { cursor: pointer; transition: filter .15s, opacity .15s; }
+.ctx-bar.has-on span:not(.on) { opacity: .45; }
+.ctx-bar span:hover { filter: brightness(1.1); }
+.ctx-cap { font-size: 14px; min-height: 1.5em; color: var(--ink); }
+/* achievements */
+button.ach { font: inherit; font-size: 12px; background: transparent; cursor: pointer; transition: transform .2s var(--ease-3), box-shadow .2s; }
+button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.ach-cap { font-size: 13.5px; color: var(--muted); min-height: 1.4em; text-align: center; }
 </style>

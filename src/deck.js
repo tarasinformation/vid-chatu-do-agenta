@@ -23,12 +23,12 @@
   var ACH = [
     ["win", "🏆", "Перша перемога", "Агент зробив те, на що в чаті пішли б десятки копіювань."],
     ["loop", "🔁", "Цикл зрозумілий", "Думає, діє, перевіряє. Жодної магії."],
-    ["claude", "📜", "Свій CLAUDE.md", "Агент тепер знає ваші правила."],
-    ["skill", "⚡", "Навичка працює", "Одна команда замість сторінки інструкцій."],
-    ["judge", "⚖️", "Тверезе судження", "Ви знаєте, що довірити агенту, а що перевірити самим."],
-    ["plan", "🚀", "Старт на справжньому агенті", "Три кроки зроблено. Далі буде легше."]
+    ["claude", "📜", "Свій CLAUDE.md", "Агент знає твої правила. І читає їх, на відміну від нас."],
+    ["skill", "⚡", "Навичка працює", "Одна команда замість сторінки інструкцій, яку ніхто не дочитував."],
+    ["judge", "⚖️", "Тверезе судження", "Тепер ясно, що довірити агенту, а що перевірити власноруч."],
+    ["plan", "🚀", "Старт на справжньому агенті", "Три кроки зроблено. Далі легше, кажуть."]
   ];
-  var PRAISE = ["Так тримати", "Чудово йдете", "Ще трохи, і ви експерт", "Колеги вже заздрять", "Оце темп", "Красиво"];
+  var PRAISE = ["Непогано", "Цілком пристойно", "Рух помітний навіть без лупи", "Колеги, мабуть, уже щось підозрюють", "Темп гідний стриманої похвали", "Без зайвого галасу, як і належить"];
   function has(k) {
     var st = A.store();
     if (k === "claude" || k === "skill") { var t = st.t || {}; return Object.keys(t).some(function (x) { return t[x] && t[x][k]; }); }
@@ -77,13 +77,13 @@
   function groups(sec) { var ids = []; $$("[data-s]", sec).forEach(function (n) { var v = n.getAttribute("data-s"); if (ids.indexOf(v) < 0) ids.push(v); }); return ids; }
   function build() {
     var S = [], hero = $("header.hero"), foot = $("footer");
-    S.push({ el: hero, s: "h0a", title: "Знайомство" }, { el: hero, s: "h0b", title: "Оберіть свій трек", sub: 1 });
+    S.push({ el: hero, s: "h0a", title: "Знайомство" }, { el: hero, s: "h0b", title: "Обери свій трек", sub: 1 });
     A.STAGES.forEach(function (st, si) {
       var sec = $("#" + st[0]); if (!sec) return;
       var ids = groups(sec); if (!ids.length) ids = [null];
       ids.forEach(function (v, k) { S.push({ el: sec, s: v, stage: st[0], sub: k, title: "Етап " + (si + 1) + " · " + st[1] + (ids.length > 1 ? " · " + (k + 1) + "/" + ids.length : "") }); });
     });
-    var fin = $("#finish"), ft = ["Фініш", "Продовжте з будь-яким ШІ", "Стіна пропозицій"];
+    var fin = $("#finish"), ft = ["Фініш", "Продовж з будь-яким ШІ", "Стіна пропозицій"];
     groups(fin).forEach(function (v, k) { S.push({ el: fin, s: v, sub: k, title: ft[k] || "Фініш", fin: true }); });
     S.push({ el: $("#backstage-cta"), extra: [foot], title: "За лаштунками" });
     var bonus = $("#bonus"); if (bonus && !bonus.hidden) S.push({ el: bonus, extra: [foot], title: "Бонус: кухня інструмента" });
@@ -96,7 +96,7 @@
     var any = $$('[data-s="' + sl.s + '"]', sl.el).some(visible);
     if (any) return;
     var w = $(".wrap", sl.el), d = document.createElement("div"); d.className = "card stack deck-lock";
-    d.innerHTML = "<h3>Тут поки зачинено 🔒</h3><p>Спершу пройдіть симуляцію на попередньому слайді: обидва шляхи, чат і агента. Тоді тут з'явиться розбір.</p>";
+    d.innerHTML = "<h3>Тут поки зачинено 🔒</h3><p>Спершу пройди симуляцію на попередньому слайді: обидва шляхи, чат і агента. Тоді тут з'явиться розбір. Підглядати не вийде, ми пробували.</p>";
     var b = document.createElement("button"); b.className = "btn primary"; b.textContent = "← До симулятора"; b.style.justifySelf = "start";
     b.onclick = function () { go(cur - (sl.sub || 0)); }; d.appendChild(b); w.appendChild(d);
   }
@@ -164,9 +164,9 @@
   function renderFinish() {
     var T = A.T(), st = A.store(), done = A.STAGES.filter(function (s) { return stageDone(s[0]); });
     var all = done.length === A.STAGES.length, got = ACH.filter(function (a) { return has(a[0]); });
-    $("#fin-title").textContent = all ? "Вітаю, ви пройшли!" : "Майже фініш";
+    $("#fin-title").textContent = all ? "Вітаю, усе пройдено" : "Майже фініш";
     var sub = $("#fin-sub"); sub.innerHTML = "";
-    if (all) sub.textContent = "Сім етапів із семи. Тепер ви знаєте мій секрет: ШІ не чарівний. Ми просто даємо йому папку, правила й спосіб перевірити себе. Спробуйте цього тижня на справжній задачі.";
+    if (all) sub.textContent = "Сім етапів із семи. Тепер ти знаєш мій секрет: ШІ не чарівний. Йому просто дали папку, правила й спосіб перевірити себе. Спробуй цього тижня на справжній задачі.";
     else {
       sub.appendChild(document.createTextNode("Пройдено " + done.length + " з " + A.STAGES.length + " етапів. Повернутися до пропущених: "));
       A.STAGES.forEach(function (s, i) { if (stageDone(s[0])) return; var b = document.createElement("button"); b.className = "btn small"; b.style.margin = "2px 4px 2px 0"; b.textContent = (i + 1) + ". " + s[1]; b.onclick = function () { go(findSlide(s[0])); }; sub.appendChild(b); });
@@ -174,7 +174,9 @@
     var nm = $("#cert-name"); nm.value = D.name || ""; nm.oninput = function () { D.name = nm.value; dsave(); };
     $("#cert-track").textContent = "на треку «" + T.who + "»";
     var bd = $("#badges"); bd.innerHTML = "";
-    ACH.forEach(function (a) { var on = has(a[0]); var d = document.createElement("div"); d.className = "ach" + (on ? " on" : ""); d.title = a[3]; d.innerHTML = "<span class='bi'>" + a[1] + "</span>"; d.appendChild(document.createTextNode(a[2])); bd.appendChild(d); });
+    var cap = $("#ach-cap"); if (!cap) { cap = document.createElement("p"); cap.id = "ach-cap"; cap.className = "ach-cap"; bd.parentNode.insertBefore(cap, bd.nextSibling); }
+    cap.textContent = "Натисни на значок, щоб дізнатися, за що він.";
+    ACH.forEach(function (a) { var on = has(a[0]); var d = document.createElement("button"); d.type = "button"; d.className = "ach" + (on ? " on" : ""); d.innerHTML = "<span class='bi'>" + a[1] + "</span>"; d.appendChild(document.createTextNode(a[2])); var show = function () { cap.textContent = a[2] + ": " + a[3] + (on ? "" : " (ще попереду)"); }; d.onclick = show; d.onmouseenter = show; bd.appendChild(d); });
     var dt = new Date(); $("#cert-date").textContent = ("0" + dt.getDate()).slice(-2) + "." + ("0" + (dt.getMonth() + 1)).slice(-2) + "." + dt.getFullYear();
     $("#cert-score").textContent = "етапів " + done.length + "/" + A.STAGES.length + " · досягнень " + got.length + "/" + ACH.length;
     $("#ai-prompt").textContent = aiPrompt(T, done, got);
@@ -209,8 +211,9 @@
       "3. Одна думка за раз. Після пояснення спитай одне коротке запитання, щоб перевірити, чи все зрозуміло. Не влаштовуй іспит.",
       "4. Якщо я попрошу, допоможи скласти CLAUDE.md або AGENTS.md і першу навичку SKILL.md для моєї задачі, крок за кроком, і поясни, куди покласти файли.",
       "5. Перед великою задачею нагадуй: спершу план, потім виконання.",
-      "6. Про кнопки, ціни, тарифи й версії продуктів кажи чесно, якщо не впевнений, і давай посилання на офіційну документацію. Нічого не вигадуй.",
+      "6. Про кнопки, ціни, тарифи й версії продуктів кажи чесно, якщо не маєш певності, і давай посилання на офіційну документацію. Нічого не вигадуй.",
       "7. Не проси в мене паролів, ключів доступу, персональних даних чи реальних документів з чутливою інформацією. Якщо я таке вставлю, зупини мене й поясни, чому так не варто.",
+      "8. Легкий сухий гумор доречний, але не замість суті.",
       "",
       "ТЕМИ, ЯКІ Я МОЖУ ПОПРОСИТИ РОЗКРИТИ",
       "- чим агент відрізняється від чату з файлами чи від проєктів",
@@ -246,27 +249,111 @@
     wallMsg("Завантажуємо пропозиції…");
     fetch("https://docs.google.com/spreadsheets/d/" + encodeURIComponent(WALL.sheet) + "/gviz/tq?tqx=out:csv").then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (t) {
       var rows = csv(t).slice(1).filter(function (r) { return r[0] && r[0].trim(); }).reverse().slice(0, 40);
-      if (!rows.length) { wallMsg("Поки що тут порожньо. Будьте першими."); return; }
+      if (!rows.length) { wallMsg("Поки що тут порожньо. Хтось має бути першим."); return; }
       var l = $("#wall-list"); l.innerHTML = "";
       rows.forEach(function (r) { var d = document.createElement("div"); d.className = "wall-item"; d.textContent = r[0].slice(0, 600); if (r[1]) { var s = document.createElement("span"); s.className = "w-d"; s.textContent = r[1].slice(0, 10); d.appendChild(s); } l.appendChild(d); });
-    }).catch(function () { wallMsg("Не вдалося завантажити стіну. Можливо, немає інтернету. Спробуйте пізніше."); });
+    }).catch(function () { wallMsg("Не вдалося завантажити стіну. Можливо, немає інтернету. Спробуй пізніше."); });
   }
   var PII = /[\w.+-]+@[\w-]+\.[\w.]+|(\+?\d[\d\s()-]{8,}\d)/;
   $("#wall-form").addEventListener("submit", function (e) {
     e.preventDefault();
     var ta = $("#wall-text"), txt = ta.value.trim(), st = $("#wall-status");
     if (!WALL.form) { st.textContent = "Збір пропозицій ще налаштовується."; return; }
-    if (txt.length < 5) { st.textContent = "Напишіть трохи більше, хоча б одне речення."; return; }
-    if (PII.test(txt)) { st.textContent = "Схоже, тут є пошта чи номер телефону. Приберіть їх, будь ласка: стіна анонімна."; return; }
+    if (txt.length < 5) { st.textContent = "Напиши трохи більше, хоча б одне речення."; return; }
+    if (PII.test(txt)) { st.textContent = "Схоже, тут є пошта чи номер телефону. Прибери їх, будь ласка: стіна анонімна."; return; }
     var now = Date.now(); D.sent = (D.sent || []).filter(function (t) { return now - t < 3600e3; });
-    if (D.sent.length >= 3) { st.textContent = "Дякуємо за запал! Не більше трьох пропозицій на годину."; return; }
+    if (D.sent.length >= 3) { st.textContent = "Запал оцінено. Ліміт: три пропозиції на годину."; return; }
     var body = new URLSearchParams(); body.append(WALL.entry, txt);
     $("#wall-send").disabled = true; st.textContent = "Надсилаємо…";
     fetch(WALL.form, { method: "POST", mode: "no-cors", body: body }).then(function () {
-      D.sent.push(now); dsave(); ta.value = ""; st.textContent = "Дякуємо! Пропозиція з'явиться на стіні після перевірки.";
-      toast("💌", "Пропозицію надіслано", "Дякуємо, що допомагаєте зробити курс кращим.");
-    }).catch(function () { st.textContent = "Не вдалося надіслати. Перевірте інтернет і спробуйте ще раз."; }).then(function () { $("#wall-send").disabled = false; });
+      D.sent.push(now); dsave(); ta.value = ""; st.textContent = "Дякуємо. Пропозиція з'явиться на стіні після перевірки.";
+      toast("💌", "Пропозицію надіслано", "Дякуємо, що допомагаєш зробити курс кращим.");
+    }).catch(function () { st.textContent = "Не вдалося надіслати. Перевір інтернет і спробуй ще раз."; }).then(function () { $("#wall-send").disabled = false; });
   });
+
+
+  /* ---------- interactive diagrams: hover / tap a part to see what it does ---------- */
+  function explainer(svg, INFO, hint) {
+    if (!svg) return;
+    svg.classList.add("isvg");
+    var fig = svg.parentNode, box = document.createElement("div");
+    box.className = "arch-info"; box.setAttribute("aria-live", "polite");
+    fig.insertBefore(box, svg.nextSibling);
+    var pinned = null;
+    function idle() { box.className = "arch-info idle"; box.innerHTML = ""; var k = document.createElement("span"); k.className = "ai-k"; k.textContent = "Схема інтерактивна"; var t = document.createElement("span"); t.textContent = hint; box.appendChild(k); box.appendChild(t); }
+    function set(k) {
+      svg.classList.toggle("has-hl", !!k);
+      $$("[data-g]", svg).forEach(function (g) { g.classList.toggle("hl", g.getAttribute("data-g") === k); });
+      if (svg.id === "arch") $$(".formula .part").forEach(function (p) { p.classList.toggle("on", p.getAttribute("data-part") === k); });
+      if (!k) { idle(); return; }
+      var t = INFO[k]; box.className = "arch-info"; box.innerHTML = "";
+      var b = document.createElement("b"); b.textContent = t[0]; var s = document.createElement("span"); s.textContent = t[1];
+      box.appendChild(b); box.appendChild(s);
+    }
+    $$("[data-g]", svg).forEach(function (g) {
+      var k = g.getAttribute("data-g"); if (!INFO[k]) return;
+      g.setAttribute("tabindex", "0"); g.setAttribute("role", "button"); g.setAttribute("aria-label", INFO[k][0] + ": що це");
+      g.addEventListener("mouseenter", function () { if (!pinned) set(k); });
+      g.addEventListener("mouseleave", function () { if (!pinned) set(null); });
+      g.addEventListener("focus", function () { set(k); });
+      g.addEventListener("click", function (e) { e.stopPropagation(); pinned = pinned === k ? null : k; set(pinned || k); $$("[data-g]", svg).forEach(function (x) { x.classList.toggle("pin", x.getAttribute("data-g") === pinned); }); });
+      g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); g.dispatchEvent(new MouseEvent("click")); } });
+    });
+    svg.addEventListener("click", function () { pinned = null; $$("[data-g]", svg).forEach(function (x) { x.classList.remove("pin"); }); set(null); });
+    idle();
+  }
+  explainer($("#arch"), {
+    human: ["Ти", "Ставиш задачу, відповідаєш на питання агента й погоджуєш зміни. Біганину між файлами агент бере на себе."],
+    instr: ["Інструкції", "CLAUDE.md з правилами проєкту і SKILL.md з рецептами задач. Звичайні текстові файли, які агент перечитує на початку кожної сесії. На відміну від більшості регламентів, їх справді читають."],
+    loop: ["Цикл", "Подумати, зробити крок, подивитися на результат і, якщо треба, ще коло. Саме цикл відрізняє агента від чату, який відповідає один раз і замовкає."],
+    model: ["Модель", "Той самий ШІ, що й у чаті. Думає й вирішує, що робити далі, але сама файлів не бачить. Для цього їй потрібні інструменти."],
+    tools: ["Інструменти", "Прочитати, записати, запустити, пошукати. Модель дає команду, інструмент виконує й повертає результат. Руки агента, якщо хочеш."],
+    folder: ["Твоя папка", "Агент бачить лише її. Читає сам, а записує тільки з твого дозволу, тож переписати бюджет «випадково» не вийде."]
+  }, "Наведи курсор або натисни на будь-яку частину: Ти, Інструкції, Модель, Інструменти, папку.");
+  (function () {
+    var svg = $("#loop-svg"); if (!svg) return;
+    ["ln-0", "ln-1", "ln-2", "ln-3"].forEach(function (id) { var g = document.getElementById(id); if (g) g.setAttribute("data-g", id); });
+    explainer(svg, {
+      "ln-0": ["Думає", "Вирішує, який крок наступний: що прочитати, що перевірити, що написати."],
+      "ln-1": ["Діє", "Викликає інструмент: відкриває файл, записує чернетку, запускає перевірку."],
+      "ln-2": ["Дивиться", "Читає результат. Не те, що мало вийти, а те, що вийшло насправді."],
+      "ln-3": ["Готово?", "Якщо все зійшлося, віддає результат тобі. Якщо ні, ще одне коло. Наполегливість без самолюбства."]
+    }, "Натисни на крок циклу, щоб побачити, що відбувається.");
+  })();
+  (function () {
+    var svg = $("#net"); if (!svg) return;
+    var keys = ["courses", "method", "tools", "human", "qa", "facts", "context", "tracks"];
+    $$(":scope > g:not(.net-edges)", svg).forEach(function (g, i) { if (keys[i]) g.setAttribute("data-g", keys[i]); });
+    explainer(svg, {
+      courses: ["Дослідження курсів", "Субагент розібрав 13 курсів про агентів і виписав, що в них працює. Головний висновок: мало практики на своїх задачах."],
+      method: ["Методика", "Інший дослідник підібрав методику: одна наскрізна задача, спершу спроба, потім пояснення, підказки поступово зникають."],
+      tools: ["Карта інструментів", "Ще один зібрав 13 інструментів різних компаній і перевірив, що вони вміють. Щоб курс не став рекламою одного продукту."],
+      human: ["Людина", "Ставила задачі, відхиляла невдалі варіанти й ухвалювала рішення. Жодного рядка коду руками, зате чимало «ні, не так»."],
+      qa: ["Перевірка якості", "Автотест проходить усі вправи трьох треків на двох ширинах екрана. Окремі субагенти читали тексти очима новачка й шукали чутливі дані."],
+      facts: ["Факт-чек", "Звірив ціни, назви кнопок і можливості продуктів з офіційними сторінками станом на 23.10.2026. Неперевірене на сторінку не потрапило."],
+      context: ["Контекст і право", "Узагальнив типові документи й пастки роботи ГО та перевірив юридичну техніку. Реальних даних у курсі немає."],
+      tracks: ["Автори треків", "Три субагенти написали сценарії для менеджерів, аналітиків і юристів, а редактори й «новачки» їх вичитали."]
+    }, "Натисни на будь-який блок, щоб дізнатися, що саме зробив цей агент.");
+  })();
+  /* context bar: each segment explains itself */
+  (function () {
+    var bar = $(".ctx-bar"); if (!bar) return;
+    var CAP = {
+      c1: "Правила з CLAUDE.md. Займають мало, а працюють щоразу.",
+      c2: "Кожен відкритий файл лежить тут до кінця сесії. Тому зайвих файлів краще не давати.",
+      c3: "Результати перевірок і пошуків. Корисні, але швидко накопичуються.",
+      c4: "Твої повідомлення й відповіді агента. Найдешевша частина.",
+      c5: "Вільне місце. Коли закінчується, агент гірше пам'ятає початок."
+    };
+    var cap = document.createElement("p"); cap.className = "ctx-cap"; cap.textContent = "Наведи або натисни на частину смужки.";
+    bar.parentNode.insertBefore(cap, bar.nextSibling);
+    $$("span", bar).forEach(function (sp) {
+      var k = sp.className; if (!CAP[k]) return;
+      sp.setAttribute("tabindex", "0"); sp.setAttribute("role", "button");
+      var on = function () { $$("span", bar).forEach(function (x) { x.classList.toggle("on", x === sp); }); bar.classList.add("has-on"); cap.textContent = sp.textContent + ": " + CAP[k]; };
+      sp.addEventListener("mouseenter", on); sp.addEventListener("focus", on); sp.addEventListener("click", on);
+    });
+  })();
 
   /* ---------- intro ---------- */
   var intro = $("#intro");
