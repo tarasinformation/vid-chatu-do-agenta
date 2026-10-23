@@ -806,6 +806,8 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
 .share-card { margin-top: 20px; padding: clamp(20px, 4vw, 32px); border-radius: 20px; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow-sm); display: grid; gap: 14px; }
 .share-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .restart { justify-self: start; margin-top: 4px; }
+.thanks { display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 14px 16px; border-radius: 14px; background: var(--manual-soft); border: 1px solid color-mix(in srgb, var(--manual) 25%, var(--line)); }
+.thanks span { color: var(--muted); }
 .share-text pre { white-space: pre-wrap; font-family: var(--font-body); font-size: 15px; line-height: 1.55; }
 
 /* ecosystem chips with logos */
@@ -1305,6 +1307,10 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
         <button class="btn" id="share-copy">Лише посилання</button>
       </div>
       <p class="meta" id="share-st" aria-live="polite"></p>
+      <div class="thanks">
+        <div><b>Хочеш подякувати за інструмент?</b> <span>Закинь на банку на скиди. Будь-яка сума допомагає 💛</span></div>
+        <a class="btn-lux small" href="https://send.monobank.ua/jar/85aNyyvL7U" target="_blank" rel="noopener">Поповнити банку</a>
+      </div>
       <button class="btn-ghost restart" id="restart">↺ Почати спочатку</button>
     </div>
   </div>
@@ -1393,6 +1399,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
   <div class="wrap stack">
     <p>На чому тримається методика: одна наскрізна задача (4C/ID), короткий провал перед поясненням (productive failure), підказки, яких дедалі меншає, питання на пригадування і перенесення на власну роботу.</p>
     <p>Документація: <a href="https://code.claude.com/docs/en/desktop-quickstart" target="_blank" rel="noopener">Claude Code у застосунку</a> · <a href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">CLAUDE.md</a> · <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">Навички</a> · <a href="https://agents.md" target="_blank" rel="noopener">AGENTS.md</a> · <a href="https://agentskills.io" target="_blank" rel="noopener">Agent Skills</a></p>
+    <p>Подякувати: <a href="https://send.monobank.ua/jar/85aNyyvL7U" target="_blank" rel="noopener">банка на скиди 💛</a></p>
     <p>Файли проєкту: <a href="https://github.com/tarasinformation/vid-chatu-do-agenta" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/tarasinformation/vid-chatu-do-agenta/archive/refs/heads/main.zip" target="_blank" rel="noopener">завантажити .zip</a></p>
     <div class="row"><button class="skip" id="reset">Скинути мій прогрес</button><button class="skip egg" id="egg">А як це зроблено?</button></div>
   </div>
@@ -1406,7 +1413,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
 
 
 <script>
-var SRC_LINES={"head.html": 814, "body.html": 592, "engine.js": 862, "deck.js": 396, "track_pm.js": 106, "track_an.js": 105, "track_law.js": 102, "build.py": 17, "vid-chatu-do-agenta.html": 2987};
+var SRC_LINES={"head.html": 816, "body.html": 597, "engine.js": 862, "deck.js": 396, "track_pm.js": 106, "track_an.js": 105, "track_law.js": 102, "build.py": 17, "vid-chatu-do-agenta.html": 2994};
 var TRACKS = {};
 TRACKS.pm = {
   who: "Менеджер проєктів", what: "Проміжний звіт донору: лограмка, індикатори, джерела", short: "звіт донору",
