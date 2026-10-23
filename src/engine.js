@@ -90,7 +90,7 @@
     });
     var L = LEVELS[level];
     $("#lvl-detail").innerHTML = '<div class="stack" style="gap:10px"><span class="eyebrow">Рівень ' + (level + 1) + ' · ' + VENDORS[vendor][level] + '</span><h3>' + L.nm + ': ' + T.doc + '</h3><p>' + T.how[level] + '</p>' +
-      '<div class="split" aria-label="Хто робить роботу"><div class="split-bar"><span class="h" style="width:' + L.split + '%"></span><span class="a" style="width:' + (100 - L.split) + '%"></span></div><div class="split-lbl"><span>Ти: ' + L.split + '%</span><span>Агент: ' + (100 - L.split) + '%</span></div><p class="meta">Відсотки умовні. Це компас, а не бухгалтерія.</p></div></div>' +
+      '<div class="split" aria-label="Хто робить роботу"><div class="split-bar"><span class="h" style="width:' + L.split + '%"></span><span class="a" style="width:' + (100 - L.split) + '%"></span></div><div class="split-lbl"><span>Ти: ' + L.split + '%</span><span>Агент: ' + (100 - L.split) + '%</span></div><p class="meta">Відсотки умовні. Вони лише показують, хто робить більше.</p></div></div>' +
       '<div><ul class="can">' + L.can.map(function (x) { return "<li>" + x + "</li>"; }).join("") + '</ul><ul class="cant">' + L.cant.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul></div>";
   }
 
@@ -157,7 +157,7 @@
     var s = T.agent[agStep];
     agentLine(s);
     if (s[0] === "ask") {
-      agAct.appendChild(el("p", { class: "meta", text: "Агент зупинився: це рішення людини. Він знає, де зупинитися." }));
+      agAct.appendChild(el("p", { class: "meta", text: "Агент зупинився, бо це рішення людини. Обери варіант нижче." }));
       s[3].forEach(function (lab, i) {
         var b = el("button", { class: "btn", text: lab });
         b.onclick = function () { answer = i; cnt.am++; setCnt(); push(agLog, "msg u", lab); agStep++; runAgent(); };
@@ -166,7 +166,7 @@
       return;
     }
     if (s[0] === "permit") {
-      agAct.appendChild(el("p", { class: "meta", text: "Режим Manual (ручне погодження): агент питає дозволу перед кожним записом файлу." }));
+      agAct.appendChild(el("p", { class: "meta", text: "Режим Manual (ручне погодження): агент питає дозволу перед кожним записом файлу. Натисни «Дозволити»." }));
       var p1 = el("button", { class: "btn primary", text: "Дозволити" });
       p1.onclick = function () { cnt.am++; setCnt(); agStep++; runAgent(); };
       agAct.appendChild(p1); return;
@@ -227,7 +227,7 @@
     var box = $("#predict"); box.innerHTML = "";
     if (pi >= T.predict.length) {
       lightNode(-1);
-      box.innerHTML = "<span class='eyebrow'>Готово</span><h3>Ось і вся «магія»</h3><p>Думає, діє, дивиться, вирішує, чи готово. Кожен крок простий. Агент повторює коло, доки результат не перевірено. Там, де потрібне твоє рішення, він зупиняється й питає. Фокусники так не працюють.</p>";
+      box.innerHTML = "<span class='eyebrow'>Готово</span><h3>Ось і вся «магія»</h3><p>Думає, діє, дивиться, вирішує, чи готово. Кожен крок простий. Агент повторює коло, доки результат не перевірено. Там, де потрібне твоє рішення, він зупиняється й питає.</p>";
       var again = el("button", { class: "btn small", text: "Пройти ще раз" }); again.onclick = function () { pi = 0; renderPredict(); }; box.appendChild(el("div", { class: "row" })).appendChild(again);
       mark(null, "loop"); return;
     }
@@ -277,7 +277,7 @@
       __data: [T.dataFolder, "твої матеріали",
         "<span class='h'># Твої матеріали</span>\nТе, з чим агент працює: редакції, дані, листи, шаблони.\nВін їх <b>читає, але не змінює</b>. Це правило записано в CLAUDE.md,\nтож оригінали лишаються цілими, навіть якщо щось піде не так.\n\n<span class='h'>## Що всередині</span>\n" + (T.chips || []).map(function (c) { return "· " + esc(c); }).join("\n")],
       __out: [T.outFolder, "результат роботи",
-        "<span class='h'># Готове</span>\nСюди агент кладе те, що зробив: чернетки, таблиці, звіт про перевірку.\nОкрема папка означає, що нове ніколи не перезаписує старе.\n\n<span class='h'>## Як із цим жити</span>\n· Відкриваєш, читаєш, правиш як звичайний документ\n· Помітив агент сумнівне місце, там стоїть [ПОТРІБНІ ДАНІ]\n· Надсилати далі вирішуєш ти. Агент такої звички не має"]
+        "<span class='h'># Готове</span>\nСюди агент кладе те, що зробив: чернетки, таблиці, звіт про перевірку.\nОкрема папка означає, що нове ніколи не перезаписує старе.\n\n<span class='h'>## Як із цим жити</span>\n· Відкриваєш, читаєш, правиш як звичайний документ\n· Де агент сумнівається, він ставить позначку [ПОТРІБНІ ДАНІ]\n· Надсилати документ далі вирішуєш ти. Агент сам нічого не надсилає"]
     };
   }
   function renderTree() {
@@ -305,7 +305,7 @@
     var box = $("#rules-box"); box.innerHTML = ""; var L = lv();
     if (L === 0) {
       box.appendChild(el("h3", { text: "Крок 1. Розглянь готовий файл правил" }));
-      box.appendChild(el("p", { class: "meta", text: "Це той самий CLAUDE.md, що й на схемі агента. Натисни розділ або наведи на нього: кожен відповідає на питання, яке агент інакше поставив би тобі." }));
+      box.appendChild(el("p", { class: "meta", text: "Це той самий CLAUDE.md, що й на схемі агента. Натисни на розділ, і поруч з'явиться пояснення. Кожен розділ відповідає на питання, яке агент інакше поставив би тобі." }));
       var wrap = el("div", { class: "annot" });
       var pre = el("pre", { class: "file" }); var side = el("div", { class: "annot-side", "aria-live": "polite" });
       var parts = claudeBody().split(/(?=<span class='h'>## )/);
@@ -323,7 +323,7 @@
       var b = el("button", { class: "btn primary", text: "Зрозуміло, далі" }); b.onclick = nextLevel; box.appendChild(el("div", { class: "row" })).appendChild(b);
     } else if (L === 1) {
       box.appendChild(el("h3", { text: "Крок 2. Допиши розділ «Чого не робити»" }));
-      box.appendChild(el("p", { class: "meta", text: "Ось той самий файл, але без останнього розділу. Обери 2 пункти з 4, які треба туди дописати. Два інші звучать розумно, але шкодять. Як і чимало порад." }));
+      box.appendChild(el("p", { class: "meta", text: "Нижче той самий файл без останнього розділу. Познач 2 пункти з 4, які треба туди дописати, і натисни «Перевірити». Два інші пункти звучать розумно, але шкодять." }));
       box.appendChild(el("pre", { class: "file" }, claudeBody().split("<span class='h'>## Чого не робити</span>")[0] + "<span class='h'>## Чого не робити</span>\n<span class='c'>- ?\n- ?</span>"));
       var g = el("div", { class: "opts" });
       T.noDo.forEach(function (o, i) {
@@ -391,7 +391,7 @@
       ta.oninput = function () { clearTimeout(tmr); tmr = setTimeout(upd, 180); };
       wrap4.appendChild(ta); wrap4.appendChild(cl); box.appendChild(wrap4); box.appendChild(out); upd();
       box.appendChild(el("p", { class: "meta", text: "Агент застосовує правила без нагадувань, бо читає файл на початку кожної роботи. Там, де правил немає, він діє на власний розсуд. Як і всі ми." }));
-      box.appendChild(el("div", { class: "note" }, "<b>Правило для правил.</b> Якщо агент двічі помилився в одному й тому самому місці, у CLAUDE.md бракує рядка. Писати файл з нуля не обов'язково: команда <code>/init</code> (агент сам переглядає папку й складає чернетку правил) або прохання «склади CLAUDE.md з того, що ти бачиш у папці» дадуть першу версію, а ти допишеш своє."));
+      box.appendChild(el("div", { class: "note" }, "<b>Правило для правил.</b> Якщо агент двічі помилився в одному й тому самому місці, у CLAUDE.md бракує рядка. Писати файл з нуля не обов'язково. Набери команду <code>/init</code>, і агент сам перегляне папку й складе чернетку правил. Або попроси: «склади CLAUDE.md з того, що ти бачиш у папці». Потім допиши своє."));
       var r = el("button", { class: "skip", text: "Пройти вправу з початку" }); r.onclick = function () { ts().lv = 0; save(); renderRules(); }; box.appendChild(r);
     }
   }
@@ -406,7 +406,7 @@
       /* tap-to-build: tap the steps in the order the agent should do them */
       var N = T.steps.length, placed = S.placed || 0, miss = S.miss || 0;
       var PH = function (i) { return i < 2 ? ["Підготовка", "агент читає правила й матеріали"] : i === N - 1 ? ["Звіт тобі", "що вирішити людині"] : ["Робота", "перевіряє дані й пише"]; };
-      box.appendChild(el("p", { text: "Агентові, як і новому колезі, треба пояснити порядок дій. Натискай кроки в тому порядку, у якому їх варто робити. Почни з найпершого." }));
+      box.appendChild(el("p", { text: "Агентові, як і новому колезі, треба пояснити порядок дій. Кроки нижче перемішано. Натискай їх по черзі, починаючи з першого." }));
       var wrap = el("div", { class: "rcp" });
       var slots = el("ol", { class: "rcp-slots" }), lastPh = "";
       for (var i = 0; i < N; i++) {
@@ -427,7 +427,7 @@
           S.miss = ++miss; save();
           c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake");
           fb.hidden = false; fb.className = "fb bad";
-          fb.textContent = "Не зараз. Зараз черга фази «" + PH(placed)[0] + "»: " + PH(placed)[1] + "." + (miss >= 2 ? " Підказка: " + T.stepsHint + "." : "");
+          fb.textContent = "Не зараз. Спершу йде «" + PH(placed)[0] + "»: " + PH(placed)[1] + "." + (miss >= 2 ? " Підказка: " + T.stepsHint + "." : "");
         };
         pool.appendChild(c);
       });
@@ -444,7 +444,7 @@
       if (placed > 0) { var rs = el("button", { class: "skip", text: "Почати спочатку" }); rs.onclick = function () { S.placed = 0; S.miss = 0; save(); renderSkill(); }; row.appendChild(rs); }
       return;
     }
-    box.appendChild(el("p", { class: "meta", text: "Навичку збережено як текстовий файл .claude/skills/" + T.skill + "/SKILL.md у твоїй папці. Запусти її: набери в полі нижче назву навички зі скісною рискою, а після неї " + ({ pm: "звітний період", an: "тему записки", law: "назву акта" })[track] + "." }));
+    box.appendChild(el("p", { class: "meta", text: "Навичку збережено як текстовий файл .claude/skills/" + T.skill + "/SKILL.md у твоїй папці. Щоб запустити її, набери в полі нижче скісну риску й назву навички, а через пробіл " + ({ pm: "звітний період", an: "тему записки", law: "назву акта" })[track] + ". Потім натисни «Надіслати»." }));
     var term = el("div", { class: "term", id: "skill-term", "aria-live": "polite" }); term.innerHTML = S.termHtml || "<span class='c'>Агент готовий. Папка: " + T.folder.replace("📁 ", "") + "</span>\n";
     box.appendChild(term);
     var row = el("form", { class: "row" }); row.style.flexWrap = "nowrap";
@@ -463,7 +463,7 @@
       if (S.skillPhase === 1 && re.test(v)) {
         typeLines(["Читаю правила CLAUDE.md… ✓", "Виконую крок 1… ✓", "Виконую крок 2… ✓", "Запускаю " + T.badScript + "…", "<span class='e'>Помилка: файл " + T.badScript + " не знайдено.</span>", "Зупиняюся. У навичці вказано файл, якого немає в папці."], function () {
           S.skillPhase = 2; save(); help.innerHTML = "";
-          help.appendChild(el("div", { class: "note warn" }, "<b>Так і задумано.</b> Навичка запускає скрипт, тобто невелику програму, яка перевіряє цифри. Ми навмисно вказали в навичці неправильну назву цього файлу. Буває й ненавмисно. Агент сам каже, що не так. Розбиратися в коді не треба, достатньо попросити його виправити."));
+          help.appendChild(el("div", { class: "note warn" }, "<b>Так і задумано.</b> Навичка запускає скрипт, тобто невелику програму, яка перевіряє цифри. Ми навмисно вказали в навичці неправильну назву цього файлу. Буває й ненавмисно. Агент сам каже, що не так. Розбиратися в коді не треба. Натисни кнопку нижче, і агент виправить помилку."));
           var fix = el("button", { class: "btn", text: "Сказати агенту: «Виправ шлях до скрипта в навичці»" });
           fix.onclick = function () { inp.value = "Виправ шлях до скрипта в навичці"; if (row.requestSubmit) row.requestSubmit(); else row.onsubmit(new Event("submit")); };
           help.appendChild(fix);
@@ -565,7 +565,7 @@
     var S = ts(); S.steps = S.steps || {};
     var all = [
       ["Встанови застосунок Claude і відкрий вкладку Code", "<p>Завантаж застосунок з <a href='https://claude.com/download' target='_blank' rel='noopener'>claude.com/download</a> і ввійди. Потрібна платна підписка Pro, Max, Team або Enterprise: на безкоштовному плані Claude Code недоступний. У бічній панелі обери вкладку <b>Code</b>. Термінал і програмування не потрібні.</p>", null, "<b>Інші інструменти</b> (кроки ті самі, лише файл правил називай AGENTS.md):<span class='dl'><a href='https://chatgpt.com/download' target='_blank' rel='noopener'>ChatGPT з Codex ↗</a><a href='https://github.com/features/copilot/cli' target='_blank' rel='noopener'>GitHub Copilot CLI ↗</a><a href='https://antigravity.google' target='_blank' rel='noopener'>Google Antigravity ↗</a><a href='https://goose-docs.ai' target='_blank' rel='noopener'>Goose, відкритий код ↗</a></span>ChatGPT і Copilot мають безкоштовний план, Antigravity безкоштовний для приватних осіб, Goose безкоштовний, але потребує оплати моделі. Повний перелік з цінами на етапі 6."],
-      ["Створи порожню папку й відкрий її", "<p>Створи на комп'ютері папку <span class='mono'>Навчальний_проєкт</span>. У застосунку натисни <b>+ New</b> (нова сесія). Під полем вводу залиш <b>Local</b>, тобто роботу з файлами на твоєму комп'ютері. Натисни вибір папки, обери <b>Open folder…</b> і вкажи цю папку. Агент бачитиме лише її.</p><p>Далі в кожному кроці натисни «Скопіювати», встав текст у поле вводу й надішли. Коли агент питає дозволу, прочитай запит і погодь або відхили його.</p>", null]
+      ["Створи порожню папку й відкрий її", "<p>Створи на комп'ютері папку <span class='mono'>Навчальний_проєкт</span>. У застосунку натисни <b>+ New</b> (нова сесія). Під полем вводу залиш <b>Local</b>, тобто роботу з файлами на твоєму комп'ютері. Натисни кнопку вибору папки, обери <b>Open folder…</b> і вкажи цю папку. Агент бачитиме лише її.</p><p>Далі в кожному кроці натисни «Скопіювати», встав текст у поле вводу й надішли. Коли агент питає дозволу, прочитай запит і погодь або відхили його.</p>", null]
     ].concat(T.bPrompts.map(function (p) { return [p[0], "<p>" + p[1] + "</p>", p[2]]; }));
     var stl = $("#steps"); stl.innerHTML = "";
     all.forEach(function (s, i) {
@@ -596,7 +596,7 @@
       $("#out-claude").textContent = T.genClaude(v); $("#out-skill").textContent = T.genSkill(v);
     }
     $("#out-skill-path").textContent = ".claude/skills/" + T.skill + "/SKILL.md";
-    $("#gen-alt").innerHTML = "Працюєш у Claude Code? Цей абзац можна пропустити. Для Codex, Antigravity чи GitHub Copilot назви файл правил <code>AGENTS.md</code>. Claude Code теж його прочитає, якщо поруч немає CLAUDE.md. Навичку для Codex та Antigravity поклади в <code>.agents/skills/" + T.skill + "/SKILL.md</code>.";
+    $("#gen-alt").innerHTML = "Якщо працюєш у Claude Code, цей абзац можна пропустити. Для Codex, Antigravity чи GitHub Copilot назви файл правил <code>AGENTS.md</code>. Claude Code теж його прочитає, якщо поруч немає CLAUDE.md. Навичку для Codex та Antigravity поклади в <code>.agents/skills/" + T.skill + "/SKILL.md</code>.";
     out();
     var p = $("#plan30"); p.innerHTML = "";
     for (var i = 0; i < 4; i++) p.appendChild(el("div", { class: "card" }, "<span class='w'>Тиждень " + (i + 1) + "</span><h3>" + T.plan[i * 2] + "</h3><p style='font-size:14.5px'>" + T.plan[i * 2 + 1] + "</p>"));
@@ -648,14 +648,14 @@
   $("#egg").onclick = function () { openBonus(true); };
   $("#egg-big").onclick = function () { openBonus(true); };
   var SRC = [
-    ["CLAUDE.md", "правила проєкту", "Те, чого вчить цей курс, застосоване до нього самого: структура, як збирати й перевіряти, правила змісту й текстів, чого не робити. Агент читає цей файл на початку кожної сесії.", "основна сесія", ["Будь-хто може продовжити роботу без цієї розмови", "Посилання на сторінку й документ з аналізом"]],
+    ["CLAUDE.md", "правила проєкту", "Правила проєкту для агента: структура, як збирати й перевіряти, правила змісту й текстів, чого не робити. Курс сам працює за тим, чого вчить. Агент читає цей файл на початку кожної сесії.", "основна сесія", ["Будь-хто може продовжити роботу без цієї розмови", "Посилання на сторінку й документ з аналізом"]],
     [".claude/skills/", "навички проєкту", "Три рецепти: /qa перевіряє всі модулі, /publish публікує за тим самим посиланням, /refresh-tools щокварталу оновлює карту інструментів.", "основна сесія", ["Кожна навичка є звичайним текстовим файлом SKILL.md", "Той самий принцип, що й /zvit у курсі"]],
     ["docs/", "журнал рішень і дослідження", "Журнал рішень з датами, правила текстів, схема файлу треку і стислі висновки досліджень: курси, методика, інструменти, юридична техніка, інтерфейс, робочий контекст.", "основна сесія за звітами субагентів", ["Знання з досліджень більше не живе лише в розмові", "Без реальних даних: лише узагальнені патерни"]],
-    ["vid-chatu-do-agenta.html", "готова сторінка", "Те, що ти зараз читаєш. Генерується автоматично, руками її ніхто не правив. Принаймні офіційно.", "build.py", ["Один файл: стилі, розмітка, дані й логіка разом", "Саме його опубліковано за посиланням"]],
+    ["vid-chatu-do-agenta.html", "готова сторінка", "Те, що ти зараз читаєш. Її збирає програма автоматично, руками її ніхто не правив.", "build.py", ["Один файл: стилі, розмітка, дані й логіка разом", "Саме його опубліковано за посиланням"]],
     ["src/head.html", "стилі", "Кольори для світлої й темної теми, шрифти, анімації схем, адаптація під телефон.", "основна сесія + правки дизайн-рецензента", ["Кольори задані змінними, тож обидві теми беруть їх з одного місця", "Окремі правила вимикають анімації для тих, кому вони заважають"]],
     ["src/body.html", "розмітка", "Каркас семи етапів, усі схеми SVG, бонус. Тексти тут спільні для всіх треків.", "основна сесія + редактор спільних текстів", ["Схеми намальовані кодом, а не картинками, тому працюють у темній темі", "Вміст, що залежить від треку, двигун підставляє сам"]],
     ["src/engine.js", "двигун", "Уся інтерактивність: симулятор чату й агента, лічильники, вправи з перевіркою, навичка з помилкою, прогрес, перемикання треків.", "основна сесія", ["Читає дані активного треку й будує з них екрани", "Прогрес зберігає лише у твоєму браузері"]],
-    ["src/deck.js", "презентація", "Показує курс слайдами: вітальне вікно, прогрес, досягнення з конфеті, сертифікат, промпт для будь-якого ШІ і стіну анонімних пропозицій.", "основна сесія", ["Працює поверх двигуна й не знає, як влаштовані вправи", "Дизайн-система: токени shadcn/ui, шрифт Geist, криві анімацій Open Props"]],
+    ["src/deck.js", "презентація", "Показує курс слайдами: вітальне вікно, прогрес, досягнення з конфеті, сертифікат, промпт для будь-якого ШІ і стіну анонімних пропозицій.", "основна сесія", ["Працює поверх двигуна й не знає, як влаштовані вправи", "Оформлення з відкритих наборів: кольори й розміри з shadcn/ui, шрифт Geist, плавність анімацій з Open Props"]],
     ["src/track_pm.js", "трек менеджерів", "Сценарій проміжного звіту: файли папки, пастки, кроки агента, вправи, запити для старту.", "автор-субагент → редактор → аудитор «новачок»", ["Понад 40 полів за спільною схемою", "Цифри узгоджені в усіх вправах"]],
     ["src/track_an.js", "трек аналітиків", "Сценарій аналітичної записки: вигрузка опитування з повторами, джерела, якість даних.", "автор-субагент → редактор → аудитор «новачок»", ["Та сама схема полів, інший зміст", "Ланцюжок розрахунку показано крок за кроком"]],
     ["src/track_law.js", "трек юристів", "Сценарій змін до Порядку: дві редакції, перенумерація, порівняльна таблиця, зауваження ЦОВВ.", "автор-субагент → редактор → аудитор «новачок» + перевірка юртехніки", ["Формули юридичної техніки звірено з посібником ВРУ", "Усі акти вигадані"]],
@@ -681,7 +681,7 @@
   /* ---------- first session: mockup + task anatomy ---------- */
   var TASKS = {
     pm: { out: "04_Чернетка/Outputs_P2.docx", bad: "Напиши звіт за другий період.", parts: [
-      "Підготуй чернетку розділу Outputs проміжного звіту за період 2 (01.03–31.07.2026), щоб я до п'ятниці погодив її з керівником.",
+      "Підготуй чернетку розділу Outputs проміжного звіту за період 2 (01.03–31.07.2026), щоб до п'ятниці погодити її з керівником.",
       "Матеріали в папці: чинна лограмка в 01_Договір, трекер і витрати в 03_Дані, місячні звіти в 02_Джерела.",
       "Результат: файл 04_Чернетка/Outputs_P2.docx за шаблоном донора, з англійськими заголовками Output 1.1 і далі.",
       "Кожен Output пиши за схемою Problem → Solution → Next steps. Біля кожної цифри вкажи файл і дату.",
@@ -714,11 +714,11 @@
   function goodPrompt() { return TASKS[track].parts.join(" "); }
   var MOCK = [
     ["Відкрий вкладку Code", "У бічній панелі застосунку Claude обери <b>Code</b>. Якщо вкладки показано іконками, наведи на них курсор, щоб побачити назви. Кожна окрема розмова з агентом тут називається сесією. Нову відкриває кнопка <b>+ New</b> (нова сесія).", function () { return barHtml() + "<div class='app-body'>" + sideHtml(true) + "<div class='app-main'><p class='hello'>Над чим працюємо?</p><div class='pbox'><div class='ph'>Опиши задачу…</div>" + rowHtml() + "</div></div></div>"; }],
-    ["Обери папку проєкту", "Під полем вводу залиш <b>Local</b>: агент працюватиме з файлами на твоєму комп'ютері. Натисни вибір папки, у меню обери <b>Open folder…</b> і вкажи папку. Агент бачитиме лише її. Тому почни з копій файлів і не відкривай домашню папку чи всі документи одразу.", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><p class='hello'>Над чим працюємо?</p><div class='pbox'><div class='ph'>Опиши задачу…</div>" + rowHtml("folder") + "</div></div></div>"; }],
+    ["Обери папку проєкту", "Під полем вводу залиш <b>Local</b>: агент працюватиме з файлами на твоєму комп'ютері. Натисни кнопку вибору папки, у меню обери <b>Open folder…</b> і вкажи папку. Агент бачитиме лише її. Для початку обери папку з копіями файлів, а не домашню папку чи всі документи.", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><p class='hello'>Над чим працюємо?</p><div class='pbox'><div class='ph'>Опиши задачу…</div>" + rowHtml("folder") + "</div></div></div>"; }],
     ["Для великої задачі обери Plan", "Задача на кілька документів? Спершу обери режим <b>Plan</b>. У ньому агент лише вивчає матеріали й пропонує план, нічого не змінюючи. Для маленької правки підійде <b>Manual</b>: агент питатиме перед кожною зміною.", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><p class='hello'>Над чим працюємо?</p><div class='pbox'><div class='ph'>Опиши задачу…</div>" + rowHtml("perm") + "</div></div></div>"; }],
     ["Опиши задачу", "Напиши задачу звичайними словами, як колезі, який уперше чує про проєкт. Що має бути в доброму описі, показано нижче, у блоці «Як описати задачу агенту».", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><div class='pbox hot' style='position:relative'><span class='badge'>4</span><div class='ph typed'>" + goodPrompt() + "</div>" + rowHtml() + "</div></div></div>"; }],
     ["Перевір і виправ план", "<b>Від цього кроку залежить результат.</b> План показує, як агент зрозумів задачу, ще до того, як він щось змінив. Перевір, чи взято всі файли, чи враховано пастки й порядок дій. Виправ словами, наприклад «спершу визнач останню редакцію». Виправити план займає хвилину, переробити п'ятнадцять файлів займає годину. Коли план правильний, погодь його.", function () { var st = T.steps.slice(0, 5).map(function (x) { return "<li>" + x + "</li>"; }).join(""); return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><div class='amsg u'>" + goodPrompt().slice(0, 90) + "…</div><div class='amsg plan hot' style='position:relative'><span class='badge'>5</span><b>План (поки нічого не змінено):</b><ol>" + st + "</ol><div class='pb'><span class='y'>✓ Погодити план</span><span>✎ Виправити</span></div></div><div class='pbox'><div class='ph typed'>Добре, але спершу перевір, чи немає новішої редакції, і лише потім пиши текст.</div>" + rowHtml() + "</div></div></div>"; }],
-    ["Погоджуй зміни", "Після погодження плану агент береться до роботи й питає дозволу перед кожним записом файлу. Прочитай зміну й погодь або відхили її. Відхиляєш? Одразу напиши, як треба, і агент врахує. Точні підписи кнопок у твоїй версії можуть відрізнятися.", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><div class='amsg'>План погоджено. Виконую крок 1 з 5.</div><div class='perm hot'><span class='badge'>6</span><b>Агент хоче створити файл " + TASKS[track].out + "</b><div class='diff'><span class='add'>+ 48 нових рядків</span></div><div class='pb'><span class='y'>✓ Погодити</span><span>✕ Відхилити</span></div></div></div></div>"; }],
+    ["Погоджуй зміни", "Після погодження плану агент береться до роботи й питає дозволу перед кожним записом файлу. Прочитай зміну й погодь або відхили її. Якщо відхиляєш, одразу напиши, як треба, і агент це врахує. Точні підписи кнопок у твоїй версії можуть відрізнятися.", function () { return barHtml() + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><div class='amsg'>План погоджено. Виконую крок 1 з 5.</div><div class='perm hot'><span class='badge'>6</span><b>Агент хоче створити файл " + TASKS[track].out + "</b><div class='diff'><span class='add'>+ 48 нових рядків</span></div><div class='pb'><span class='y'>✓ Погодити</span><span>✕ Відхилити</span></div></div></div></div>"; }],
     ["Переглянь зміни", "Кнопка <b>Changes</b> угорі показує всі зміни у файлах. Натисни потрібний рядок у файлі, лиши коментар, і агент переробить саме це місце.", function () { return barHtml(true) + "<div class='app-body'>" + sideHtml() + "<div class='app-main'><div class='amsg'>Готово: " + TASKS[track].out + ". Три місця потребують твого рішення, список нижче.</div><div class='pbox'><div class='ph'>Відповісти агенту…</div>" + rowHtml() + "</div></div></div>"; }]
   ];
   function renderMock() {
@@ -744,7 +744,7 @@
   function renderPT() {
     var P = TASKS[track], lg = $("#pt-legend"), tx = $("#pt-text");
     lg.innerHTML = ""; PT_LBL.forEach(function (l, i) { var s = el("span", { class: "c" + i, text: l, tabindex: "0" }); var on = function () { var m = tx.querySelector(".miss"); if (m) { m.classList.add("hl"); return; } tx.classList.add("dim"); tx.querySelectorAll(".seg").forEach(function (g) { g.classList.toggle("on", g.getAttribute("data-i") === String(i)); }); }; var off = function () { if (ptPin === i) return; var m = tx.querySelector(".miss"); if (m) m.classList.remove("hl"); tx.classList.remove("dim"); }; s.setAttribute("role", "button"); if (ptPin === i) { s.classList.add("pin"); setTimeout(on, 0); } s.onclick = function () { ptPin = ptPin === i ? -1 : i; renderPT(); }; s.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); s.click(); } }); s.addEventListener("mouseenter", on); s.addEventListener("focus", on); s.addEventListener("mouseleave", off); s.addEventListener("blur", off); lg.appendChild(s); });
-    if (ptMode === "bad") tx.innerHTML = "«" + P.bad + "»<span class='miss'>Тут немає жодної з шести частин. Агент вгадуватиме, які файли брати, у якому форматі писати й що перевіряти. І нічого не спитає, бо не знає, де зупинитися. Зате дуже старанно.</span>";
+    if (ptMode === "bad") tx.innerHTML = "«" + P.bad + "»<span class='miss'>Тут немає жодної з шести частин. Агент вгадуватиме, які файли брати, у якому форматі писати й що перевіряти. І нічого не спитає, бо не знає, де зупинитися.</span>";
     else tx.innerHTML = P.parts.map(function (p, i) { return "<span class='seg c" + i + "' data-i='" + i + "'>" + p + "</span>"; }).join(" ");
     var g = $("#pt-gen"); g.innerHTML = "";
     PT_LBL.forEach(function (l, i) { var lab = el("label", { class: "full" }); lab.appendChild(el("span", { text: l })); var ta = el("textarea", { id: "pt-" + i }); ta.value = P.parts[i]; ta.oninput = ptOut; lab.appendChild(ta); g.appendChild(lab); });
