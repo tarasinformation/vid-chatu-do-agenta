@@ -715,6 +715,7 @@ button.step[aria-pressed="true"]::after, button.track[aria-pressed="true"]::afte
 button.step[aria-pressed="true"] { background: var(--accent-soft); }
 button.step[aria-pressed="true"]::before { content: ""; position: absolute; left: 50%; bottom: -9px; width: 14px; height: 14px; background: var(--accent-soft); border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: translateX(-50%) rotate(45deg); }
 button.step:not([aria-pressed="true"])::after { animation: tap-hint 2.8s var(--ease-in-out-3) 1.2s 3; }
+@media (max-width: 760px) { button.step[aria-pressed="true"]::before { display: none; } }
 @keyframes tap-hint { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent); } 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 22%, transparent); } }
 #ladder-steps { position: relative; margin-top: 34px; }
 #ladder-steps::before { content: "Натисни на сходинку, і її розбір відкриється нижче ↓"; position: absolute; top: -30px; left: 0; font-size: 13.5px; font-weight: 500; color: var(--ink); }
@@ -1378,7 +1379,7 @@ button.ach:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
 
 
 <script>
-var SRC_LINES={"head.html": 801, "body.html": 577, "engine.js": 858, "deck.js": 376, "track_pm.js": 106, "track_an.js": 105, "track_law.js": 102, "build.py": 17, "vid-chatu-do-agenta.html": 2935};
+var SRC_LINES={"head.html": 802, "body.html": 577, "engine.js": 858, "deck.js": 376, "track_pm.js": 106, "track_an.js": 105, "track_law.js": 102, "build.py": 17, "vid-chatu-do-agenta.html": 2936};
 var TRACKS = {};
 TRACKS.pm = {
   who: "Менеджер проєктів", what: "Проміжний звіт донору: лограмка, індикатори, джерела", short: "звіт донору",
